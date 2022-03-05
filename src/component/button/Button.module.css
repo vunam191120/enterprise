@@ -1,0 +1,103 @@
+:root {
+  --primary: #4628ff;
+  --warning: #ffd028;
+  --danger: #eb3f27;
+  --success: #75fa83;
+  --white: #fdfdfd;
+  --dark: #181717;
+  --yellow-0: #fb771a;
+}
+
+.btn {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btnPrimarySolid {
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
+}
+
+.btnWarningSolid {
+  background-color: var(--warning);
+  color: var(--white);
+  border: none;
+}
+
+.btnDangerSolid {
+  background-color: var(--danger);
+  color: var(--white);
+  border: none;
+}
+
+.btnSuccessSolid {
+  background-color: var(--success);
+  color: var(--white);
+  border: none;
+}
+
+.btnYellowSolid {
+  background-color: var(--yellow-0);
+  color: var(--white);
+  border: none;
+}
+
+.btnPrimarySolidOutline {
+  background-color: var(--primary);
+  color: var(--white);
+  border: 2px solid var(--primary);
+}
+
+.btnWarningSolidOutline {
+  background-color: var(--warning);
+  color: var(--white);
+  border: 2px solid var(--warning);
+}
+
+.btnDangerSolidOutline {
+  background-color: var(--danger);
+  color: var(--white);
+  border: 2px solid var(--danger);
+}
+
+.btnSuccessSolidOutline {
+  background-color: var(--success);
+  color: var(--white);
+  border: 2px solid var(--success);
+}
+
+.btnYellowSolidOutline {
+  background-color: var(--yellow-0);
+  color: var(--white);
+  border: 2px solid var(--yellow-0);
+}
+
+.btnSmall {
+  padding: 10px 20px;
+  font-size: 12px;
+}
+
+.btnMedium {
+  padding: 15px 30px;
+  font-size: 14px;
+}
+
+.btnLarge {
+  padding: 20px 35px;
+  font-size: 16px;
+}
+
+.btnExLarge {
+  padding: 18px 0;
+  text-align: center;
+  width: 100%;
+  font-size: 18px;
+}
