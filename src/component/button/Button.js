@@ -8,26 +8,30 @@ const STYLES = [
   "btnDangerSolid",
   "btnSuccessSolid",
   "btnYellowSolid",
+  "btnGraySolid",
   "btnPrimarySolidOutline",
   "btnWarningSolidOutline",
   "btnDangerSolidOutline",
   "btnSuccessSolidOutline",
   "btnYellowSolidOutline",
+  "btnGraySolidOutline",
 ];
-const SIZES = ["btnSmall", "btnMedium", "btnLarge", "btnExLarge"];
+const SIZES = [
+  "btnSmall",
+  "btnMedium",
+  "btnLarge",
+  "btnExLarge",
+  "btnSecondary",
+];
 
-export default function Button({
-  type,
-  onClick,
-  text,
-  buttonStype,
-  buttonSize,
-}) {
-  const checkButtonStyle = STYLES.includes(buttonStype)
-    ? buttonStype
+export default function Button(props) {
+  const checkButtonStyle = STYLES.includes(props.buttonStyle)
+    ? props.buttonStyle
     : STYLES[0];
 
-  const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
+  const checkButtonSize = SIZES.includes(props.buttonSize)
+    ? props.buttonSize
+    : SIZES[0];
 
   return (
     <button
@@ -36,9 +40,10 @@ export default function Button({
         styles[`${checkButtonSize}`],
         styles[`${checkButtonStyle}`]
       )}
-      type={type}
+      type={props.type}
+      onClick={props.onClick}
     >
-      {text}
+      {props.children}
     </button>
   );
 }

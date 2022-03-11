@@ -1,19 +1,17 @@
 import "./App.css";
 import GlobalStyle from "./component/globalStyle/GlobalStyle";
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./component/navbar/Navbar";
-import About from "./component/about/About";
-import Home from "./component/home/Home";
-import Login from "./component/login/Login";
+import Layout from "./layout/Layout";
+import Login from "./pages/login/Login";
 
 function App() {
   return (
     <GlobalStyle>
-      {/* <Navbar /> */}
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        {/* <PrivateRoute> */}
+        <Route path="*" element={<Layout />} />
+        {/* </PrivateRoute> */}
       </Routes>
     </GlobalStyle>
   );

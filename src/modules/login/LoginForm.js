@@ -1,36 +1,32 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import styles from "./Login.module.css";
+import styles from "./LoginForm.module.css";
+import axios from "axios";
 import slider from "./../../assets/loginBg.png";
-import Input from "../input/Input";
-import Button from "../button/Button";
+import Input from "../../component/input/Input";
+import Button from "../../component/button/Button";
 
-export default function Login() {
+export default function LoginForm() {
   const [account, setAccount] = useState({ username: "", password: "" });
   const [remember, setRemember] = useState(true);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(account);
+    console.log("Account: ", account);
+    axios
+      .post("http://103.107.182.190/service1/login", account)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   };
 
-  const configInput = (
-    id,
-    nameAtt,
-    type,
-    text,
-    value,
-    placeholder,
-    checked
-  ) => {
+  const configInput = (id, className, nameAtt, type, value, placeholder) => {
     return {
       id: id,
+      className: className,
       name: nameAtt,
       type: type,
-      text: text,
       value: value,
       placeholder: placeholder,
-      checked: checked,
     };
   };
 
@@ -55,49 +51,59 @@ export default function Login() {
               adipisicing.
             </p>
             <form onSubmit={handleSubmit}>
-              <Input
-                onChange={handleOnChange}
-                config={configInput(
-                  "username",
-                  "username",
-                  "text",
-                  "Username:",
-                  account.username,
-                  "your-email@gmail.com"
-                )}
-              />
-              <Input
-                onChange={handleOnChange}
-                config={configInput(
-                  "password",
-                  "password",
-                  "password",
-                  "Password:",
-                  account.password,
-                  "Your password"
-                )}
-              />
-              <div className={clsx(styles.flexJusBet)}>
+              <div className={styles.formGroup}>
+                <label htmlFor="username" className={styles.label}>
+                  Username:
+                </label>
                 <Input
+                  onChange={handleOnChange}
+                  config={configInput(
+                    "username",
+                    "",
+                    "username",
+                    "text",
+                    account.username,
+                    "your-email@gmail.com"
+                  )}
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="username" className={styles.label}>
+                  Password:
+                </label>
+                <Input
+                  onChange={handleOnChange}
+                  config={configInput(
+                    "password",
+                    "",
+                    "password",
+                    "password",
+                    account.password,
+                    "Your password"
+                  )}
+                />
+              </div>
+              <div className={clsx(styles.flexJusBet)}>
+                {/* <Input
                   onChange={handleCheckbox}
                   config={configInput(
                     "remember",
                     "remember",
                     "checkbox",
-                    "Remember me",
                     remember,
                     null,
                     remember
                   )}
-                />
+                /> */}
                 {/* <Button type={"text"} text={"Forgot password?"} /> */}
               </div>
               <Button
                 type={"submit"}
-                text={"Log In"}
                 buttonSize={"btnExLarge"}
-                buttonStype={"btnYellowSolid"}
-              />
+                buttonStyle={"btnYellowSolid"}
+              >
+                Log In
+              </Button>
             </form>
           </div>
         </div>

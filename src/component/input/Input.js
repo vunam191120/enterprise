@@ -8,6 +8,13 @@ export default function Input({ config, onChange }) {
     // target.value = !isTrueSet;
     // target.checked = !isTrueSet;
     // newData = !isTrueSet;
+    if (config.type === "file") {
+      return onChange(target);
+    }
+    if (config.type === "search") {
+      let newData = target.value;
+      return onChange(newData);
+    }
     let newData = {
       name: target.name,
       value: target.value,
@@ -15,24 +22,20 @@ export default function Input({ config, onChange }) {
     onChange(newData);
   };
 
-  if (config.type === "checkbox") {
-    return <div className={clsx(styles.checkboxItems)}></div>;
-  }
+  // if (config.type === "checkbox") {
+  //   return <div className={clsx(styles.checkboxItems)}></div>;
+  // }
 
   return (
-    <div className={clsx(styles.formGroup)}>
-      <label htmlFor={config.id} className={clsx(styles.label)}>
-        {config.text}
-      </label>
-      <input
-        onChange={handleChange}
-        type={config.type}
-        className={clsx(styles.formControl)}
-        placeholder={config.placeholder}
-        id={config.id}
-        value={config.value}
-        name={config.name}
-      />
-    </div>
+    <input
+      onChange={handleChange}
+      type={config.type}
+      className={!config.className ? styles.formControl : config.className}
+      placeholder={config.placeholder}
+      id={config.id}
+      value={config.value}
+      name={config.name}
+      accept={config.accept}
+    />
   );
 }

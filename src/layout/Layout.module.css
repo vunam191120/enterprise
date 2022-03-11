@@ -1,0 +1,26 @@
+.app {
+  display: block;
+  width: 100%;
+  height: 2000px;
+}
+
+.sidebar {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
+}
+
+.contentContainer {
+  display: block;
+  margin-top: 70px;
+  margin-left: 260px;
+  background-color: black;
+}
+
+.content {
+  background-color: #f2edf3;
+  height: 1000px;
+}
