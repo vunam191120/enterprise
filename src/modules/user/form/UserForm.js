@@ -35,13 +35,13 @@ function UserForm({ mode }) {
             full_name: response.data.data.full_name,
             role_id: response.data.data.role_id,
             phone: response.data.data.phone.toString(),
-            // avatar: response.data.data.avatar,
             avatar: "",
           });
         });
     } else if (mode === "create") {
       setUser({
         username: "",
+        password: "",
         first_name: "",
         last_name: "",
         full_name: "",
@@ -98,13 +98,38 @@ function UserForm({ mode }) {
     e.preventDefault();
     if (mode === "update") {
       return axios
-        .put("http://103.107.182.190/service1/user", user)
-        .then((response) => console.log(response.data))
+        .put(`http://103.107.182.190/service1/user`, {
+          username: user.username,
+          full_name: user.full_name,
+          last_name: user.last_name,
+          first_name: user.first_name,
+          phone: user.phone,
+          role_id: user.role_id,
+          avatar: user.avatar,
+        })
+        .then((response) => {
+          console.log(response.data);
+          // navigate("/users/view");
+          navigate(-1);
+        })
         .catch((err) => console.log(err));
     }
     return axios
-      .post("http://103.107.182.190/service1/user", user)
-      .then((response) => response.data)
+      .post(`http://103.107.182.190/service1/user`, {
+        username: user.username,
+        password: user.password,
+        full_name: user.full_name,
+        last_name: user.last_name,
+        first_name: user.first_name,
+        phone: user.phone,
+        role_id: +user.role_id,
+        avatar: user.avatar,
+      })
+      .then((response) => {
+        console.log(response.data);
+        // navigate("/users/view");
+        navigate(-1);
+      })
       .catch((err) => console.log(err));
   };
 
@@ -136,6 +161,24 @@ function UserForm({ mode }) {
             )}
           />
         </div>
+        {mode === "create" && (
+          <div className={styles.formGroup}>
+            <label htmlFor="password" className={styles.label}>
+              Password:
+            </label>
+            <Input
+              onChange={handleOnChange}
+              config={configInput(
+                "password",
+                "",
+                "password",
+                "password",
+                user.password,
+                "Your password"
+              )}
+            />
+          </div>
+        )}
         <div className={styles.formGroup}>
           <label htmlFor="firstName" className={styles.label}>
             First Name:
@@ -234,7 +277,7 @@ function UserForm({ mode }) {
           <label htmlFor="avatar" className={styles.label}>
             Avatar:
           </label>
-          <Input
+          {/* <Input
             onChange={handleOnImageChange}
             config={configInput(
               "avatar",
@@ -244,6 +287,17 @@ function UserForm({ mode }) {
               "",
               "",
               "image/*"
+            )}
+          /> */}
+          <Input
+            onChange={handleOnChange}
+            config={configInput(
+              "avatar",
+              "",
+              "avatar",
+              "text",
+              user.avatar,
+              "Your Avatar Name"
             )}
           />
         </div>

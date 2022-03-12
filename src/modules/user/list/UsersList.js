@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
@@ -8,9 +8,10 @@ import ProductTableHead from "./table-head";
 import Button from "../../../component/button/Button";
 
 function UsersList({ currentPage, onCurrentPage, onPageSize }) {
-  const [username, setUsername] = useState("");
+  const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get("http://103.107.182.190/service1/user/").then((response) => {
@@ -20,23 +21,24 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
 
   const handleClickClose = () => setIsOpen(false);
 
-  const onClickDelete = (username) => {
+  const onClickDelete = (deleteUserId) => {
     setIsOpen(true);
-    setUsername(username);
+    setUserId(deleteUserId);
   };
 
-  const handleClickDeleteUser = (deleteUsername) => {
-    const deleteUser = {
-      username: deleteUsername,
-    };
+  const handleClickDeleteUser = (deleteUserId) => {
     axios
-      .delete("http://103.107.182.190/service1/user", deleteUser)
-      .then((response) => console.log(response.data))
+      .delete(`http://103.107.182.190/service1/user/${deleteUserId}`)
+      .then((response) => {
+        console.log(response.data);
+        // navigate("/users/view");
+        navigate(-1);
+      })
       .catch((err) => console.log(err));
   };
 
   const renderRows = (user, index, onClickDelete) => (
-    <tr key={`${user.id} - ${index}`}>
+    <tr key={`${user.user_id} - ${index}`}>
       <td>{index + 1}</td>
       <td>{user.avatar}</td>
       <td>{user.full_name}</td>
@@ -57,7 +59,7 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
           type={"button"}
           buttonSize={"btnSmall"}
           buttonStyle={"btnDangerSolid"}
-          onClick={() => onClickDelete(user.username)}
+          onClick={() => onClickDelete(user.user_id)}
         >
           Delete
         </Button>
@@ -87,7 +89,7 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
           title="Confirm Infomation"
           message="Are you sure to delete this record?"
           onClose={handleClickClose}
-          onConfirm={() => handleClickDeleteUser(username)}
+          onConfirm={() => handleClickDeleteUser(userId)}
         />
       </div>
     );
