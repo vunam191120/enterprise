@@ -3,7 +3,6 @@ import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 
 import avt1 from "./../../../assets/avt1.jpg";
-import avt2 from "./../../../assets/teej1.jpeg";
 import styles from "./UserForm.module.css";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
@@ -13,6 +12,7 @@ function UserForm({ mode }) {
   const navigate = useNavigate();
   const { usernameParam } = useParams();
   const [loading, setLoading] = useState(false);
+  const [departments, setDepartments] = useState([]);
   const [user, setUser] = useState(null);
 
   //   Initial State
@@ -24,6 +24,13 @@ function UserForm({ mode }) {
   //   const [avatar, setAvatar] = useState("");
 
   useEffect(() => {
+    // Call Department
+    axios
+      .get("http://103.107.182.190/service1/department")
+      .then((response) => {
+        setDepartments(response.data.data);
+      })
+      .catch((err) => console.log(err));
     if (mode === "update") {
       axios
         .get(`http://103.107.182.190/service1/user/${usernameParam}`)
@@ -33,6 +40,7 @@ function UserForm({ mode }) {
             first_name: response.data.data.first_name,
             last_name: response.data.data.last_name,
             full_name: response.data.data.full_name,
+            department_id: response.data.data.department_id,
             role_id: response.data.data.role_id,
             phone: response.data.data.phone.toString(),
             avatar: "",
@@ -45,6 +53,7 @@ function UserForm({ mode }) {
         first_name: "",
         last_name: "",
         full_name: "",
+        department_id: "",
         role_id: "",
         phone: "",
         avatar: "",
@@ -72,41 +81,27 @@ function UserForm({ mode }) {
     };
   };
 
-  const handleOnChange = (newData) => {
-    setUser({ ...user, [newData.name]: newData.value });
-  };
-
-  const handleOnImageChange = (target) => {
-    // let fileName = target.value
-    //   .substr(target.value.lastIndexOf("\\") + 1)
-    //   .split(".")[0];
-    // let extensionName = target.value.split(".")[1];
-    // let avatar = `./../../../assets/${fileName}.${extensionName}`;
-    // console.log(avatar);
-
-    let files = target.files;
-
-    let reader = new FileReader();
-    reader.readAsDataURL(files[0]);
-
-    reader.onload = (e) => {
-      setUser({ ...user, [target.name]: e.target.result });
-    };
+  const handleOnChange = (target) => {
+    if (target.name === "avatar") {
+      return setUser({ ...user, [target.name]: target.files[0] });
+    }
+    setUser({ ...user, [target.name]: target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const formData = new FormData();
     if (mode === "update") {
+      formData.append("username", user.username);
+      formData.append("full_name", user.full_name);
+      formData.append("last_name", user.last_name);
+      formData.append("first_name", user.first_name);
+      formData.append("phone", user.phone);
+      formData.append("role_id", +user.role_id);
+      formData.append("department_id", +user.department_id);
+      formData.append("avatar", user.avatar);
       return axios
-        .put(`http://103.107.182.190/service1/user`, {
-          username: user.username,
-          full_name: user.full_name,
-          last_name: user.last_name,
-          first_name: user.first_name,
-          phone: user.phone,
-          role_id: user.role_id,
-          avatar: user.avatar,
-        })
+        .put(`http://103.107.182.190/service1/user`, formData)
         .then((response) => {
           console.log(response.data);
           // navigate("/users/view");
@@ -114,17 +109,19 @@ function UserForm({ mode }) {
         })
         .catch((err) => console.log(err));
     }
+
+    formData.append("username", user.username);
+    formData.append("password", user.password);
+    formData.append("full_name", user.full_name);
+    formData.append("last_name", user.last_name);
+    formData.append("first_name", user.first_name);
+    formData.append("phone", user.phone);
+    formData.append("role_id", +user.role_id);
+    formData.append("department_id", +user.department_id);
+    formData.append("avatar", user.avatar);
+
     return axios
-      .post(`http://103.107.182.190/service1/user`, {
-        username: user.username,
-        password: user.password,
-        full_name: user.full_name,
-        last_name: user.last_name,
-        first_name: user.first_name,
-        phone: user.phone,
-        role_id: +user.role_id,
-        avatar: user.avatar,
-      })
+      .post(`http://103.107.182.190/service1/user`, formData)
       .then((response) => {
         console.log(response.data);
         // navigate("/users/view");
@@ -139,6 +136,7 @@ function UserForm({ mode }) {
         <Spinner />
       </div>
     );
+  } else {
   }
 
   return (
@@ -231,30 +229,44 @@ function UserForm({ mode }) {
           <label htmlFor="role" className={styles.label}>
             Role:
           </label>
-          {/* <Input
-            onChange={handleOnChange}
-            config={configInput(
-              "role",
-              "",
-              "role_id",
-              "number",
-              user.role_id,
-              "Your Role"
-            )}
-          /> */}
           <select
             name="role_id"
-            defaultValue={user.role_id === "" ? "default" : user.role_id}
+            defaultValue={user.role_id === "" ? "" : user.role_id}
             id="role"
             onChange={(e) => handleOnChange(e.target)}
+            required
           >
-            <option value="default" disabled hidden>
+            <option value="" disabled hidden>
               Choose your role...
             </option>
             <option value="1">Quality Assurance Coordinator</option>
             <option value="2">Quality Assurance Manager</option>
             <option value="3">Staff</option>
             <option value="4">Admin</option>
+          </select>
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor="department" className={styles.label}>
+            Department:
+          </label>
+          <select
+            name="department_id"
+            defaultValue={user.department_id === "" ? "" : user.department_id}
+            id="department"
+            onChange={(e) => handleOnChange(e.target)}
+            required
+          >
+            <option value="" disabled hidden>
+              Choose your department...
+            </option>
+            {departments.map((department, index) => (
+              <option
+                key={`${department.name} ${index}`}
+                value={department.department_id}
+              >
+                {department.department_name}
+              </option>
+            ))}
           </select>
         </div>
         <div className={styles.formGroup}>
@@ -277,8 +289,8 @@ function UserForm({ mode }) {
           <label htmlFor="avatar" className={styles.label}>
             Avatar:
           </label>
-          {/* <Input
-            onChange={handleOnImageChange}
+          <Input
+            onChange={handleOnChange}
             config={configInput(
               "avatar",
               "",
@@ -287,17 +299,6 @@ function UserForm({ mode }) {
               "",
               "",
               "image/*"
-            )}
-          /> */}
-          <Input
-            onChange={handleOnChange}
-            config={configInput(
-              "avatar",
-              "",
-              "avatar",
-              "text",
-              user.avatar,
-              "Your Avatar Name"
             )}
           />
         </div>
