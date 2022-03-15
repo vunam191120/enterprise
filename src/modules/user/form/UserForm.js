@@ -10,8 +10,7 @@ import Spinner from "../../../component/spinner/Spinner";
 
 function UserForm({ mode }) {
   const navigate = useNavigate();
-  const { usernameParam } = useParams();
-  const [loading, setLoading] = useState(false);
+  const { username } = useParams();
   const [departments, setDepartments] = useState([]);
   const [user, setUser] = useState(null);
 
@@ -33,15 +32,10 @@ function UserForm({ mode }) {
       .catch((err) => console.log(err));
     if (mode === "update") {
       axios
-        .get(`http://103.107.182.190/service1/user/${usernameParam}`)
+        .get(`http://103.107.182.190/service1/user/${username}`)
         .then((response) => {
           setUser({
-            username: response.data.data.username,
-            first_name: response.data.data.first_name,
-            last_name: response.data.data.last_name,
-            full_name: response.data.data.full_name,
-            department_id: response.data.data.department_id,
-            role_id: response.data.data.role_id,
+            ...response.data.data,
             phone: response.data.data.phone.toString(),
             avatar: "",
           });
@@ -68,7 +62,8 @@ function UserForm({ mode }) {
     type,
     value,
     placeholder,
-    accept
+    accept,
+    disabled
   ) => {
     return {
       id: id,
@@ -78,6 +73,7 @@ function UserForm({ mode }) {
       value: value,
       placeholder: placeholder,
       accept: accept,
+      disabled: disabled,
     };
   };
 
@@ -92,7 +88,6 @@ function UserForm({ mode }) {
     e.preventDefault();
     const formData = new FormData();
     if (mode === "update") {
-      formData.append("username", user.username);
       formData.append("full_name", user.full_name);
       formData.append("last_name", user.last_name);
       formData.append("first_name", user.first_name);
@@ -100,8 +95,9 @@ function UserForm({ mode }) {
       formData.append("role_id", +user.role_id);
       formData.append("department_id", +user.department_id);
       formData.append("avatar", user.avatar);
+
       return axios
-        .put(`http://103.107.182.190/service1/user`, formData)
+        .put(`http://103.107.182.190/service1/user/${user.user_id}`, formData)
         .then((response) => {
           console.log(response.data);
           // navigate("/users/view");
@@ -136,7 +132,6 @@ function UserForm({ mode }) {
         <Spinner />
       </div>
     );
-  } else {
   }
 
   return (
@@ -155,7 +150,9 @@ function UserForm({ mode }) {
               "username",
               "text",
               user.username,
-              "Your username"
+              "Your username",
+              "",
+              mode === "update" ? true : false
             )}
           />
         </div>
@@ -251,7 +248,7 @@ function UserForm({ mode }) {
           </label>
           <select
             name="department_id"
-            defaultValue={user.department_id === "" ? "" : user.department_id}
+            defaultValue={user.department_id !== "" ? user.department_id : ""}
             id="department"
             onChange={(e) => handleOnChange(e.target)}
             required

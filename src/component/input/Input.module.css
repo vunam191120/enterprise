@@ -14,6 +14,11 @@
   outline: none;
 }
 
+.formControl[type="text"]:disabled,
+.formControl[type="number"]:disabled {
+  background: #dddddd;
+}
+
 /* Checkbox */
 .checkboxItems {
   display: block;

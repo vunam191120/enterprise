@@ -4,19 +4,19 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
-import ProductTableHead from "./table-head";
+import UserTableHead from "./table-head";
 import Button from "../../../component/button/Button";
 
 function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://103.107.182.190/service1/user/").then((response) => {
-      setProducts(response.data.data);
-    });
+    axios
+      .get("http://103.107.182.190/service1/user/")
+      .then((response) => setUsers(response.data.data));
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -67,7 +67,7 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
     </tr>
   );
 
-  if (products.length === 0) {
+  if (users.length === 0) {
     return (
       <div>
         <Table loading={true} />
@@ -78,10 +78,11 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
       <div>
         <Table
           loading={false}
-          head={<ProductTableHead />}
+          head={<UserTableHead />}
           renderRows={renderRows}
           onClickDeleteButton={onClickDelete}
-          data={products}
+          data={users}
+          title="User List"
         />
 
         <Popup

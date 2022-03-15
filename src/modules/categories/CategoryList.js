@@ -1,7 +1,8 @@
 import React from "react";
+import CategoriesList from "./list/CategoriesList";
 
 function CategoryList() {
-  return <div>CategoryList</div>;
+  return <CategoriesList />;
 }
 
 export default CategoryList;

@@ -2,15 +2,17 @@
 import React, { useState } from "react";
 import styles from "./Layout.module.css";
 import clsx from "clsx";
+import { Routes, Route } from "react-router-dom";
+
 import Header from "../component/header/Header";
 import Sidebar from "../component/sidebar/Sidebar";
-import { Routes, Route } from "react-router-dom";
-import Categories from "../pages/categories/Categories";
+import Category from "../pages/category/Category";
 import Dashboard from "../pages/dashboard/Dashboard";
 import User from "../pages/user/User";
 import UpdateUser from "../pages/user/update/UpdateUser";
+import UpdateCategory from "../pages/category/update/UpdateCategory";
 import CreateUser from "../pages/user/create/CreateUser";
-
+import CreateCategory from "../pages/category/create/CreateCategory";
 import Popup from "../component/popup/Popup";
 
 export default function Layout() {
@@ -38,16 +40,25 @@ export default function Layout() {
         <div className={clsx(styles.content)}>
           <Routes>
             <Route path="/dashboard" element={<Popup />} />
-            <Route path="/categories" element={<Categories />}></Route>
+            <Route path="/categories">
+              <Route path="/categories/update">
+                <Route
+                  path="/categories/update/:cateId"
+                  element={<UpdateCategory />}
+                />
+              </Route>
+              <Route path="/categories/create" element={<CreateCategory />} />
+              <Route path="/categories/view" element={<Category />} />
+            </Route>
             <Route path="/users">
               <Route path="/users/update">
                 <Route
-                  path="/users/update/:usernameParam"
+                  path="/users/update/:username"
                   element={<UpdateUser />}
-                ></Route>
+                />
               </Route>
-              <Route path="/users/view" element={<User />}></Route>
-              <Route path="/users/create" element={<CreateUser />}></Route>
+              <Route path="/users/view" element={<User />} />
+              <Route path="/users/create" element={<CreateUser />} />
             </Route>
           </Routes>
         </div>

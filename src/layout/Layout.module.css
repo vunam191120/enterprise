@@ -10,6 +10,7 @@
   top: 0;
   bottom: 0;
   width: 260px;
+  background-color: #fff;
 }
 
 .contentContainer {
@@ -22,4 +23,5 @@
 .content {
   background-color: #f2edf3;
   padding: 44px 36px;
+  min-height: 100vh;
 }

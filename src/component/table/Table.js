@@ -10,6 +10,7 @@ function Table({
   data,
   renderRows,
   onClickDeleteButton,
+  title,
   // currentPage,
   // pageSize,
   // onPageSize,
@@ -34,7 +35,11 @@ function Table({
       );
     }
     if (data.length === 0 || !data) {
-      return <tr>No data</tr>;
+      return (
+        <tr>
+          <td>No data</td>
+        </tr>
+      );
     }
     return data.map((item, index) =>
       renderRows(item, index, onClickDeleteButton)
@@ -44,7 +49,7 @@ function Table({
   return (
     // <div {...props}>
     <div>
-      <div>Table</div>
+      <div>{title}</div>
       <table>
         {head}
         <tbody>{renderTableBody()}</tbody>
