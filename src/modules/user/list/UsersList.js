@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { BiEditAlt } from "react-icons/bi";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
+import styles from "./UsersList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import UserTableHead from "./table-head";
-import Button from "../../../component/button/Button";
 
 function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   const [userId, setUserId] = useState("");
@@ -38,44 +40,51 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   };
 
   const renderRows = (user, index, onClickDelete) => (
-    <tr key={`${user.user_id} - ${index}`}>
-      <td>{index + 1}</td>
-      <td>{user.avatar}</td>
+    <tr
+      style={{ backgroundColor: (index + 1) % 2 !== 0 ? "#f2edf3" : "#fff" }}
+      key={`${user.user_id} - ${index}`}
+    >
+      <td>
+        <img
+          src={`http://103.107.182.190/${user.avatar}`}
+          alt="Avatar"
+          className={styles.avatarImg}
+        />
+      </td>
       <td>{user.full_name}</td>
       <td>{user.username}</td>
       <td>{user.phone}</td>
-      <td>{user.profile_status ? "Active" : "Disabled"}</td>
       <td>
-        <Link to={`/users/update/${user.username}`}>
-          <Button
-            type={"button"}
-            buttonSize={"btnSmall"}
-            buttonStyle={"btnPrimarySolid"}
-          >
-            Update
-          </Button>
-        </Link>
-        <Button
-          type={"button"}
-          buttonSize={"btnSmall"}
-          buttonStyle={"btnDangerSolid"}
-          onClick={() => onClickDelete(user.user_id)}
+        {user.profile_status ? (
+          <span className={styles.badgeActive}>Active</span>
+        ) : (
+          <span className={styles.badgeDisabled}>Disabled</span>
+        )}
+      </td>
+      <td>
+        <Link
+          className={styles.iconAction}
+          to={`/users/update/${user.username}`}
         >
-          Delete
-        </Button>
+          <BiEditAlt />
+        </Link>
+        <RiDeleteBin5Line
+          className={styles.iconAction}
+          onClick={() => onClickDelete(user.user_id)}
+        />
       </td>
     </tr>
   );
 
   if (users.length === 0) {
     return (
-      <div>
+      <div className={styles.container}>
         <Table loading={true} />
       </div>
     );
   } else {
     return (
-      <div>
+      <div className={styles.container}>
         <Table
           loading={false}
           head={<UserTableHead />}

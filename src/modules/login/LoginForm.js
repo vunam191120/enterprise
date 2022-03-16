@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import styles from "./LoginForm.module.css";
 import axios from "axios";
-import slider from "./../../assets/loginBg.png";
+import slider from "./../../assets/background/loginBg.png";
 import Input from "../../component/input/Input";
 import Button from "../../component/button/Button";
 

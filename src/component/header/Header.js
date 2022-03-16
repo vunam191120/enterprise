@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import avatar from "./../../assets/avt1.jpg";
-import styles from "./Header.module.css";
 import { IconContext } from "react-icons";
 import { GoThreeBars } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
@@ -12,6 +10,9 @@ import {
 import { BiEnvelope } from "react-icons/bi";
 import { AiOutlineBell } from "react-icons/ai";
 import { BsPower } from "react-icons/bs";
+
+import avatar from "./../../assets/user/avatar/avt1.jpg";
+import styles from "./Header.module.css";
 import Search from "../search/Search";
 
 export default function Header() {

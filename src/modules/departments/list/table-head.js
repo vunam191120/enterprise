@@ -4,11 +4,10 @@ function TableHead() {
   return (
     <thead>
       <tr>
-        <th>Category Name</th>
-        <th>Staff ID</th>
-        <th>Department ID</th>
+        <th>Department Name</th>
+        <th>Manager ID</th>
         <th>Description</th>
-        <th>ACTION</th>
+        <th>Action</th>
       </tr>
     </thead>
   );

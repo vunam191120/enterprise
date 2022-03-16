@@ -6,14 +6,16 @@ import { Routes, Route } from "react-router-dom";
 
 import Header from "../component/header/Header";
 import Sidebar from "../component/sidebar/Sidebar";
-import Category from "../pages/category/Category";
 import Dashboard from "../pages/dashboard/Dashboard";
+import Department from "../pages/department/Department";
+import Category from "../pages/category/Category";
 import User from "../pages/user/User";
 import UpdateUser from "../pages/user/update/UpdateUser";
 import UpdateCategory from "../pages/category/update/UpdateCategory";
+import UpdateDepartment from "../pages/department/update/UpdateDepartment";
 import CreateUser from "../pages/user/create/CreateUser";
 import CreateCategory from "../pages/category/create/CreateCategory";
-import Popup from "../component/popup/Popup";
+import CreateDepartment from "../pages/department/create/CreateDepartment";
 
 export default function Layout() {
   // const renderRoutes = (routes) => {
@@ -39,7 +41,20 @@ export default function Layout() {
         {/* Content showed below */}
         <div className={clsx(styles.content)}>
           <Routes>
-            <Route path="/dashboard" element={<Popup />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/departments">
+              <Route path="/departments/update">
+                <Route
+                  path="/departments/update/:departmentID"
+                  element={<UpdateDepartment />}
+                />
+              </Route>
+              <Route
+                path="/departments/create"
+                element={<CreateDepartment />}
+              />
+              <Route path="/departments/view" element={<Department />} />
+            </Route>
             <Route path="/categories">
               <Route path="/categories/update">
                 <Route
@@ -62,6 +77,11 @@ export default function Layout() {
             </Route>
           </Routes>
         </div>
+
+        {/* Footer */}
+        <footer>
+          <p>I'm Footer</p>
+        </footer>
       </div>
     </div>
   );

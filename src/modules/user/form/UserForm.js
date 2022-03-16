@@ -1,12 +1,14 @@
 import axios from "axios";
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
+import { AiOutlineUpload } from "react-icons/ai";
 
-import avt1 from "./../../../assets/avt1.jpg";
+import defaultAvt from "./../../../assets/user/avatar/defaultUserImage.png";
 import styles from "./UserForm.module.css";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
+import Select from "../../../component/select/Select";
 
 function UserForm({ mode }) {
   const navigate = useNavigate();
@@ -37,7 +39,6 @@ function UserForm({ mode }) {
           setUser({
             ...response.data.data,
             phone: response.data.data.phone.toString(),
-            avatar: "",
           });
         });
     } else if (mode === "create") {
@@ -63,7 +64,8 @@ function UserForm({ mode }) {
     value,
     placeholder,
     accept,
-    disabled
+    disabled,
+    hidden
   ) => {
     return {
       id: id,
@@ -74,6 +76,7 @@ function UserForm({ mode }) {
       placeholder: placeholder,
       accept: accept,
       disabled: disabled,
+      hidden: hidden,
     };
   };
 
@@ -135,18 +138,20 @@ function UserForm({ mode }) {
   }
 
   return (
-    <div>
-      <h2>{mode === "update" ? `Update User` : `Create User`}</h2>
+    <div className={styles.formContainer}>
+      <h2 className={styles.title}>
+        {mode === "update" ? `Update User` : `Create User`}
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label htmlFor="username" className={styles.label}>
-            Username:
+            Username
           </label>
           <Input
             onChange={handleOnChange}
             config={configInput(
               "username",
-              "",
+              styles.formInput,
               "username",
               "text",
               user.username,
@@ -159,13 +164,13 @@ function UserForm({ mode }) {
         {mode === "create" && (
           <div className={styles.formGroup}>
             <label htmlFor="password" className={styles.label}>
-              Password:
+              Password
             </label>
             <Input
               onChange={handleOnChange}
               config={configInput(
                 "password",
-                "",
+                styles.formInput,
                 "password",
                 "password",
                 user.password,
@@ -176,13 +181,13 @@ function UserForm({ mode }) {
         )}
         <div className={styles.formGroup}>
           <label htmlFor="firstName" className={styles.label}>
-            First Name:
+            First Name
           </label>
           <Input
             onChange={handleOnChange}
             config={configInput(
               "firstName",
-              "",
+              styles.formInput,
               "first_name",
               "text",
               user.first_name,
@@ -192,13 +197,13 @@ function UserForm({ mode }) {
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="lastName" className={styles.label}>
-            Last Name:
+            Last Name
           </label>
           <Input
             onChange={handleOnChange}
             config={configInput(
               "lastName",
-              "",
+              styles.formInput,
               "last_name",
               "text",
               user.last_name,
@@ -208,13 +213,13 @@ function UserForm({ mode }) {
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="fullName" className={styles.label}>
-            Full Name:
+            Full Name
           </label>
           <Input
             onChange={handleOnChange}
             config={configInput(
               "fullName",
-              "",
+              styles.formInput,
               "full_name",
               "text",
               user.full_name,
@@ -224,14 +229,13 @@ function UserForm({ mode }) {
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="role" className={styles.label}>
-            Role:
+            Role
           </label>
-          <select
+          <Select
             name="role_id"
             defaultValue={user.role_id === "" ? "" : user.role_id}
             id="role"
             onChange={(e) => handleOnChange(e.target)}
-            required
           >
             <option value="" disabled hidden>
               Choose your role...
@@ -240,18 +244,17 @@ function UserForm({ mode }) {
             <option value="2">Quality Assurance Manager</option>
             <option value="3">Staff</option>
             <option value="4">Admin</option>
-          </select>
+          </Select>
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="department" className={styles.label}>
-            Department:
+            Department
           </label>
-          <select
+          <Select
             name="department_id"
             defaultValue={user.department_id !== "" ? user.department_id : ""}
             id="department"
             onChange={(e) => handleOnChange(e.target)}
-            required
           >
             <option value="" disabled hidden>
               Choose your department...
@@ -264,11 +267,11 @@ function UserForm({ mode }) {
                 {department.department_name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="phone" className={styles.label}>
-            Phone:
+            Phone
           </label>
           <Input
             onChange={handleOnChange}
@@ -283,33 +286,39 @@ function UserForm({ mode }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label htmlFor="avatar" className={styles.label}>
-            Avatar:
-          </label>
+          <label className={styles.label}>Avatar</label>
+          <div className={styles.preview}>
+            <img
+              className={styles.imgPreview}
+              src={
+                user.avatar === ""
+                  ? defaultAvt
+                  : `http://103.107.182.190/${user.avatar}`
+              }
+              alt="preview avatar"
+            />
+            <label htmlFor="avatar" className={styles.uploadBtn}>
+              <AiOutlineUpload />
+              Upload
+            </label>
+          </div>
           <Input
             onChange={handleOnChange}
             config={configInput(
               "avatar",
-              "",
+              styles.avatarInput,
               "avatar",
               "file",
-              "",
+              undefined,
               "",
               "image/*"
             )}
           />
         </div>
-        <div>
-          <h1>Preview Avatar</h1>
-          <img
-            src={user.avatar === "" ? avt1 : user.avatar}
-            alt="preview avatar"
-          />
-        </div>
         <Button
           type={"submit"}
           buttonSize={"btnLarge"}
-          buttonStype={"btnPrimarySolid"}
+          buttonStyle={"btnPurpleSolid"}
         >
           Confirm
         </Button>

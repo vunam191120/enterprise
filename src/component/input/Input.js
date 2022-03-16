@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Input.module.css";
 
 export default function Input({ config, onChange }) {
@@ -36,6 +36,8 @@ export default function Input({ config, onChange }) {
       name={config.name}
       accept={config.accept}
       disabled={config.disabled}
+      required
+      // hidden={config.hidden}
     />
   );
 }

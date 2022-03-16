@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from "react";
-import { RiContactsBookLine } from "react-icons/ri";
 
 import Spinner from "../spinner/Spinner";
 import styles from "./Table.module.css";
@@ -47,10 +46,9 @@ function Table({
   };
 
   return (
-    // <div {...props}>
-    <div>
-      <div>{title}</div>
-      <table>
+    <div className={styles.container}>
+      <h4 className={styles.title}>{title}</h4>
+      <table className={styles.table}>
         {head}
         <tbody>{renderTableBody()}</tbody>
       </table>

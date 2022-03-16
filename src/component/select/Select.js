@@ -1,5 +1,7 @@
 import React from "react";
 
+import styles from "./Select.module.css";
+
 function Select({ onChange, id, name, className, defaultValue, children }) {
   const handleOnChange = (event) => {
     onChange(event.target);
@@ -7,7 +9,7 @@ function Select({ onChange, id, name, className, defaultValue, children }) {
   return (
     <select
       name={name}
-      className={className}
+      className={className ? className : styles.select}
       defaultValue={defaultValue !== "" ? defaultValue : ""}
       id={id}
       onChange={handleOnChange}

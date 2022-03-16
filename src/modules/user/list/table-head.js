@@ -4,13 +4,12 @@ function TableHead() {
   return (
     <thead>
       <tr>
-        <th>STT</th>
-        <th>Avatar</th>
+        <th>User</th>
         <th>Full Name</th>
-        <th>EMAIL (username)</th>
-        <th>PHONE</th>
+        <th>Email</th>
+        <th>Phone</th>
         <th>Profile Status</th>
-        <th>ACTION</th>
+        <th>Action</th>
       </tr>
     </thead>
   );

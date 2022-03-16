@@ -59,35 +59,3 @@
   font-size: 0.875rem;
   transition: all 0.6s ease;
 }
-
-.avatarInput {
-  display: none;
-}
-
-.preview {
-  width: 150px;
-  margin-left: 200px;
-}
-
-.uploadBtn {
-  width: 100%;
-  padding: 0.375rem 0;
-  color: #fff;
-  display: block;
-  text-align: center;
-  background: linear-gradient(to right, #90caf9, #047edf 99%);
-  margin-top: 10px;
-  cursor: pointer;
-  transition: 0.4s ease;
-}
-
-.uploadBtn:hover {
-  transform: translateY(-5px);
-}
-
-.imgPreview {
-  height: 150px;
-  width: 150px;
-  display: block;
-  border: 1px solid #b66dff;
-}
