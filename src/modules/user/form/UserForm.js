@@ -15,6 +15,7 @@ function UserForm({ mode }) {
   const { username } = useParams();
   const [departments, setDepartments] = useState([]);
   const [user, setUser] = useState(null);
+  const [preview, setPreview] = useState();
 
   //   Initial State
   //   const [username, setUsername] = useState("");
@@ -40,6 +41,7 @@ function UserForm({ mode }) {
             ...response.data.data,
             phone: response.data.data.phone.toString(),
           });
+          setPreview(`http://103.107.182.190/${response.data.data.avatar}`);
         });
     } else if (mode === "create") {
       setUser({
@@ -82,6 +84,12 @@ function UserForm({ mode }) {
 
   const handleOnChange = (target) => {
     if (target.name === "avatar") {
+      // Change preview avatar by using FileReader
+      const reader = new FileReader();
+      reader.readAsDataURL(target.files[0]);
+      reader.onload = (event) => {
+        setPreview(event.target.result);
+      };
       return setUser({ ...user, [target.name]: target.files[0] });
     }
     setUser({ ...user, [target.name]: target.value });
@@ -290,11 +298,7 @@ function UserForm({ mode }) {
           <div className={styles.preview}>
             <img
               className={styles.imgPreview}
-              src={
-                user.avatar === ""
-                  ? defaultAvt
-                  : `http://103.107.182.190/${user.avatar}`
-              }
+              src={user.avatar === "" ? defaultAvt : preview}
               alt="preview avatar"
             />
             <label htmlFor="avatar" className={styles.uploadBtn}>
