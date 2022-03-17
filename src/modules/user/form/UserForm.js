@@ -16,14 +16,7 @@ function UserForm({ mode }) {
   const [departments, setDepartments] = useState([]);
   const [user, setUser] = useState(null);
   const [preview, setPreview] = useState();
-
-  //   Initial State
-  //   const [username, setUsername] = useState("");
-  //   const [password, setPassword] = useState("");
-  //   const [firstName, setFirstName] = useState("");
-  //   const [lastName, setLastName] = useState("");
-  //   const [phone, setPhone] = useState("");
-  //   const [avatar, setAvatar] = useState("");
+  const [oldImage, setOldImage] = useState(false);
 
   useEffect(() => {
     // Call Department
@@ -50,6 +43,7 @@ function UserForm({ mode }) {
         first_name: "",
         last_name: "",
         full_name: "",
+        gender: "",
         department_id: "",
         role_id: "",
         phone: "",
@@ -67,7 +61,8 @@ function UserForm({ mode }) {
     placeholder,
     accept,
     disabled,
-    hidden
+    hidden,
+    required = false
   ) => {
     return {
       id: id,
@@ -79,6 +74,7 @@ function UserForm({ mode }) {
       accept: accept,
       disabled: disabled,
       hidden: hidden,
+      required: required,
     };
   };
 
@@ -90,6 +86,7 @@ function UserForm({ mode }) {
       reader.onload = (event) => {
         setPreview(event.target.result);
       };
+      setOldImage(true);
       return setUser({ ...user, [target.name]: target.files[0] });
     }
     setUser({ ...user, [target.name]: target.value });
@@ -97,15 +94,18 @@ function UserForm({ mode }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("User", user);
     const formData = new FormData();
     if (mode === "update") {
       formData.append("full_name", user.full_name);
       formData.append("last_name", user.last_name);
       formData.append("first_name", user.first_name);
+      formData.append("gender", user.gender);
       formData.append("phone", user.phone);
       formData.append("role_id", +user.role_id);
       formData.append("department_id", +user.department_id);
       formData.append("avatar", user.avatar);
+      formData.append("old_image", oldImage);
 
       return axios
         .put(`http://103.107.182.190/service1/user/${user.user_id}`, formData)
@@ -122,6 +122,7 @@ function UserForm({ mode }) {
     formData.append("full_name", user.full_name);
     formData.append("last_name", user.last_name);
     formData.append("first_name", user.first_name);
+    formData.append("gender", user.gender);
     formData.append("phone", user.phone);
     formData.append("role_id", +user.role_id);
     formData.append("department_id", +user.department_id);
@@ -236,6 +237,41 @@ function UserForm({ mode }) {
           />
         </div>
         <div className={styles.formGroup}>
+          <label className={styles.label}>gender</label>
+          <div className={styles.radioContainer}>
+            <div className={styles.radioContent}>
+              <Input
+                onChange={handleOnChange}
+                config={configInput(
+                  "male",
+                  styles.radioInput,
+                  "gender",
+                  "radio",
+                  !user.gender ? "male" : user.gender
+                )}
+              />
+              <label htmlFor="male" className={styles.radioLabel}>
+                Male
+              </label>
+            </div>
+            <div className={styles.radioContent}>
+              <Input
+                onChange={handleOnChange}
+                config={configInput(
+                  "female",
+                  styles.radioInput,
+                  "gender",
+                  "radio",
+                  !user.gender ? "female" : user.gender
+                )}
+              />
+              <label htmlFor="female" className={styles.radioLabel}>
+                Female
+              </label>
+            </div>
+          </div>
+        </div>
+        <div className={styles.formGroup}>
           <label htmlFor="role" className={styles.label}>
             Role
           </label>
@@ -260,9 +296,9 @@ function UserForm({ mode }) {
           </label>
           <Select
             name="department_id"
-            defaultValue={user.department_id !== "" ? user.department_id : ""}
+            defaultValue={user.department_id !== "" ? user.department_id : "0"}
             id="department"
-            onChange={(e) => handleOnChange(e.target)}
+            onChange={handleOnChange}
           >
             <option value="" disabled hidden>
               Choose your department...
@@ -313,7 +349,7 @@ function UserForm({ mode }) {
               styles.avatarInput,
               "avatar",
               "file",
-              undefined,
+              "",
               "",
               "image/*"
             )}

@@ -10,7 +10,8 @@
   margin: 0 0 2rem 0;
 }
 
-.label {
+.label,
+.radioLabel {
   display: inline-block;
   margin-bottom: 0.5rem;
   font-size: 0.875rem;
@@ -90,4 +91,22 @@
   width: 150px;
   display: block;
   border: 1px solid #b66dff;
+}
+
+.radioContent {
+  display: flex;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.radioContainer {
+  margin-top: 5px;
+  display: flex;
+}
+
+.radioInput,
+.radioLabel {
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 10px;
 }

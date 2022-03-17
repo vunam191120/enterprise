@@ -36,7 +36,7 @@ export default function Input({ config, onChange }) {
       name={config.name}
       accept={config.accept}
       disabled={config.disabled}
-      required
+      required={config.required}
       // hidden={config.hidden}
     />
   );
