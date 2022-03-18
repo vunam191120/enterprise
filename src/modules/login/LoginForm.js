@@ -12,10 +12,11 @@ export default function LoginForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Account: ", account);
     axios
       .post("http://103.107.182.190/service1/login", account)
-      .then((response) => console.log(response))
+      .then((response) => {
+        localStorage.setItem("authenticator", response.data.token);
+      })
       .catch((err) => console.log(err));
   };
 

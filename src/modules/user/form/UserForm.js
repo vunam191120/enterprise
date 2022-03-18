@@ -94,7 +94,6 @@ function UserForm({ mode }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("User", user);
     const formData = new FormData();
     if (mode === "update") {
       formData.append("full_name", user.full_name);
@@ -106,9 +105,14 @@ function UserForm({ mode }) {
       formData.append("department_id", +user.department_id);
       formData.append("avatar", user.avatar);
       formData.append("old_image", oldImage);
+      const token = localStorage.getItem("authorization");
 
       return axios
-        .put(`http://103.107.182.190/service1/user/${user.user_id}`, formData)
+        .put(
+          `http://103.107.182.190/service1/user/${user.user_id}`,
+          formData,
+          token
+        )
         .then((response) => {
           console.log(response.data);
           // navigate("/users/view");
