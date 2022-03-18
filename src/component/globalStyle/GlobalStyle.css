@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+@import url("https://cdn.syncfusion.com/ej2/material.css");
 
 * {
   margin: 0;
@@ -9,6 +10,10 @@
 body,
 html {
   font-size: 16px;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .grid {
@@ -347,4 +352,15 @@ html {
     padding-left: 20px;
     padding-right: 20px;
   }
+}
+
+/* Override CSS of Datepicker */
+/* .cssCustom.e-input-group:not(.e-float-icon-left):not(.e-float-input)::before, */
+.cssCustom.e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::before,
+.cssCustom.e-input-group.e-control-wrapper:not(.e-float-icon-left):not(.e-float-input)::after {
+  background-color: #b66dff;
+}
+
+.cssCustom.e-date-wrapper span.e-input-group-icon.e-date-icon.e-icons.e-active {
+  color: #b66dff;
 }

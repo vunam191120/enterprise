@@ -64,7 +64,10 @@ function CategoryForm({ mode }) {
     if (mode === "update") {
       return axios
         .put(`http://103.107.182.190/service1/category`, category)
-        .then((response) => console.log(response.data))
+        .then((response) => {
+          console.log(response.data);
+          navigate("/categories/view", { replace: true });
+        })
         .catch((err) => console.log(err));
     }
 
@@ -75,7 +78,10 @@ function CategoryForm({ mode }) {
         staff_id: category.staff_id,
         department_id: category.department_id,
       })
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log(response.data);
+        navigate("/categories/view", { replace: true });
+      })
       .catch((err) => console.log(err));
   };
 

@@ -1,5 +1,3 @@
-import styles from "./table-head.module.css";
-
 function TableHead() {
   return (
     <thead>

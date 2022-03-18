@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { GoThreeBars } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
@@ -17,6 +18,8 @@ import Search from "../search/Search";
 
 export default function Header() {
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
   const configInput = (id, className, nameAtt, type, value, placeholder) => {
     return {
       id: id,
@@ -30,6 +33,11 @@ export default function Header() {
 
   const handleOnChange = (newData) => {
     setSearch(newData);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/login", { replace: true });
   };
 
   return (
@@ -55,13 +63,12 @@ export default function Header() {
           <p>Vu Hai Nam</p>
           <MdKeyboardArrowDown className={styles.iconRight} />
         </div>
-        <IconContext.Provider
-          value={{ color: "#9c9fa6", className: styles.iconsAction }}
-        >
+        <IconContext.Provider value={{ className: styles.iconsAction }}>
           <MdFullscreen />
           <BiEnvelope />
           <AiOutlineBell />
-          <BsPower />
+          <BsPower onClick={logout} />
+          {/* <BsPower /> */}
         </IconContext.Provider>
       </div>
     </div>

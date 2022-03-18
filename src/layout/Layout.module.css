@@ -11,6 +11,7 @@
   bottom: 0;
   width: 260px;
   background-color: #fff;
+  z-index: 20;
 }
 
 .contentContainer {
@@ -23,5 +24,29 @@
 .content {
   background-color: #f2edf3;
   padding: 44px 36px;
-  min-height: 100vh;
+  min-height: calc(100vh - 70px);
+}
+
+.footer {
+  background: #f2edf3;
+  border-top: 1px solid #e7dee9;
+  padding: 30px 2rem;
+  transition: all 0.4 ease;
+  font-size: calc(0.875rem - 0.05rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer span:first-child {
+  color: #9c9fa6;
+}
+
+.footer span:last-child {
+  color: #343a40;
+}
+
+.footer span:last-child > a {
+  color: #1bcfb4;
+  text-decoration: none;
 }

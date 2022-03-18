@@ -1,13 +1,12 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./DepartmentForm.module.css";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
 import Select from "../../../component/select/Select";
-// import Select from "../../../component/select/Select";
 
 function DepartmentForm({ mode }) {
   const navigate = useNavigate();
@@ -77,7 +76,10 @@ function DepartmentForm({ mode }) {
           manager_id: department.manager_id,
           department_id: department.department_id,
         })
-        .then((response) => console.log(response.data))
+        .then((response) => {
+          console.log(response.data);
+          navigate("/departments/view", { replace: true });
+        })
         .catch((err) => console.log(err));
     }
 
@@ -87,7 +89,10 @@ function DepartmentForm({ mode }) {
         description: department.description,
         manager_id: department.manager_id,
       })
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        console.log(response.data);
+        navigate("/departments/view", { replace: true });
+      })
       .catch((err) => console.log(err));
   };
 
@@ -139,19 +144,6 @@ function DepartmentForm({ mode }) {
           <label htmlFor="manager" className={styles.label}>
             Manager ID
           </label>
-          {/* <Input
-            onChange={handleOnChange}
-            config={configInput(
-              "manger",
-              styles.formInput,
-              "manager_id",
-              "number",
-              department.manager_id,
-              "Manager ID",
-              "",
-              true
-            )}
-          /> */}
           <Select
             name="manager_id"
             onChange={handleOnChange}

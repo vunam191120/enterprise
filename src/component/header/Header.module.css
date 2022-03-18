@@ -10,6 +10,7 @@
   height: 70px;
   color: #000;
   background: #fff;
+  z-index: 20;
 }
 
 .left,
@@ -70,4 +71,11 @@
 
 .iconsAction {
   font-size: 18px;
+  transition: 0.4s ease;
+  cursor: pointer;
+  color: #9c9fa6;
+}
+
+.iconsAction:hover {
+  color: #b66dff;
 }

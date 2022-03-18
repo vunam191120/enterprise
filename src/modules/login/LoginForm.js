@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 import styles from "./LoginForm.module.css";
 import axios from "axios";
@@ -6,16 +6,27 @@ import slider from "./../../assets/background/loginBg.png";
 import Input from "../../component/input/Input";
 import Button from "../../component/button/Button";
 
+import { useNavigate } from "react-router-dom";
+import { isLogin } from "../../helpers/isLogin";
+
 export default function LoginForm() {
   const [account, setAccount] = useState({ username: "", password: "" });
-  const [remember, setRemember] = useState(true);
+  // const [remember, setRemember] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin()) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     axios
       .post("http://103.107.182.190/service1/login", account)
       .then((response) => {
-        localStorage.setItem("authenticator", response.data.token);
+        localStorage.setItem("accessToken", response.data.token);
+        navigate("/dashboard", { replace: true });
       })
       .catch((err) => console.log(err));
   };
@@ -35,9 +46,9 @@ export default function LoginForm() {
     setAccount({ ...account, [newData.name]: newData.value });
   };
 
-  const handleCheckbox = (newData) => {
-    setRemember(newData);
-  };
+  // const handleCheckbox = (newData) => {
+  //   setRemember(newData);
+  // };
 
   return (
     <section className={clsx(styles.container)}>

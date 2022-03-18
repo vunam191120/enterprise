@@ -35,7 +35,7 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
       )
       .then((response) => {
         console.log(response.data);
-        navigate(-1);
+        navigate("/departments/view", { replace: true });
       })
       .catch((err) => console.log(err));
   };

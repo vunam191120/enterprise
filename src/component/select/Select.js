@@ -4,7 +4,6 @@ import styles from "./Select.module.css";
 
 function Select({ onChange, id, name, className, defaultValue, children }) {
   const handleOnChange = (event) => {
-    console.log(event.target.name);
     onChange(event.target);
   };
   return (

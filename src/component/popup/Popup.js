@@ -9,7 +9,7 @@ function Popup({ isOpen, title, message, onClose, onConfirm }) {
   return (
     <div>
       {isOpen && (
-        <div className={styles.modal}>
+        <div className={styles.modal} onClick={onClose}>
           <div className={styles.popupContainer}>
             <div className={styles.popupHeader}>
               <IoIosCloseCircleOutline color="#f15e5e" size="100px" />

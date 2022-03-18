@@ -12,6 +12,23 @@ const SidebarQAM = [
     iconOpened: <RiArrowUpSFill />,
   },
   {
+    title: "Term",
+    path: "/terms",
+    icon: <IoMedkit />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "View",
+        path: "/terms/view",
+      },
+      {
+        title: "Create",
+        path: "/terms/create",
+      },
+    ],
+  },
+  {
     title: "Department",
     path: "/departments",
     icon: <IoMedkit />,

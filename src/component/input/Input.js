@@ -38,6 +38,7 @@ export default function Input({ config, onChange }) {
       disabled={config.disabled}
       required={config.required}
       // hidden={config.hidden}
+      checked={config.checked}
     />
   );
 }

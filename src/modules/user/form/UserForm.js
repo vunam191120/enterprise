@@ -62,7 +62,8 @@ function UserForm({ mode }) {
     accept,
     disabled,
     hidden,
-    required = false
+    required = false,
+    checked = false
   ) => {
     return {
       id: id,
@@ -75,6 +76,7 @@ function UserForm({ mode }) {
       disabled: disabled,
       hidden: hidden,
       required: required,
+      checked: checked,
     };
   };
 
@@ -105,18 +107,12 @@ function UserForm({ mode }) {
       formData.append("department_id", +user.department_id);
       formData.append("avatar", user.avatar);
       formData.append("old_image", oldImage);
-      const token = localStorage.getItem("authorization");
 
       return axios
-        .put(
-          `http://103.107.182.190/service1/user/${user.user_id}`,
-          formData,
-          token
-        )
+        .put(`http://103.107.182.190/service1/user/${user.user_id}`, formData)
         .then((response) => {
           console.log(response.data);
-          // navigate("/users/view");
-          navigate(-1);
+          navigate("/users/view", { replace: true });
         })
         .catch((err) => console.log(err));
     }
@@ -136,8 +132,7 @@ function UserForm({ mode }) {
       .post(`http://103.107.182.190/service1/user`, formData)
       .then((response) => {
         console.log(response.data);
-        // navigate("/users/view");
-        navigate(-1);
+        navigate("/users/view", { replace: true });
       })
       .catch((err) => console.log(err));
   };
@@ -241,7 +236,7 @@ function UserForm({ mode }) {
           />
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.label}>gender</label>
+          <label className={styles.label}>Gender</label>
           <div className={styles.radioContainer}>
             <div className={styles.radioContent}>
               <Input
@@ -251,7 +246,14 @@ function UserForm({ mode }) {
                   styles.radioInput,
                   "gender",
                   "radio",
-                  !user.gender ? "male" : user.gender
+                  // !user.gender ? "male" : user.gender
+                  "male",
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  user.gender === "male"
                 )}
               />
               <label htmlFor="male" className={styles.radioLabel}>
@@ -266,7 +268,14 @@ function UserForm({ mode }) {
                   styles.radioInput,
                   "gender",
                   "radio",
-                  !user.gender ? "female" : user.gender
+                  // !user.gender ? "female" : user.gender
+                  "female",
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  undefined,
+                  user.gender === "female"
                 )}
               />
               <label htmlFor="female" className={styles.radioLabel}>
@@ -283,7 +292,7 @@ function UserForm({ mode }) {
             name="role_id"
             defaultValue={user.role_id === "" ? "" : user.role_id}
             id="role"
-            onChange={(e) => handleOnChange(e.target)}
+            onChange={handleOnChange}
           >
             <option value="" disabled hidden>
               Choose your role...
