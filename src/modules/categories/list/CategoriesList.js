@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosClient from "../../../apis/axios.config";
 import { Link, useNavigate } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
@@ -16,7 +16,7 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
+    axiosClient
       .get("http://103.107.182.190/service1/category")
       .then((response) => setCategories(response.data.data));
   }, []);
@@ -29,7 +29,7 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
   };
 
   const handleClickDeleteCate = (deleteCateId) => {
-    axios
+    axiosClient
       .delete(`http://103.107.182.190/service1/category/${deleteCateId}`)
       .then((response) => {
         console.log(response.data);

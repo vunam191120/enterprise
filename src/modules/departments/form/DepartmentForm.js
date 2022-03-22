@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "../../../apis/axios.config";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -16,14 +16,14 @@ function DepartmentForm({ mode }) {
 
   useEffect(() => {
     // Get manager
-    axios.get(`http://103.107.182.190/service1/user`).then((response) => {
+    axiosClient.get(`http://103.107.182.190/service1/user`).then((response) => {
       const filterManger = response.data.data.filter((manager) => {
         return manager.role_id === 4;
       });
       setManagers(filterManger);
     });
     if (mode === "update") {
-      axios
+      axiosClient
         .get(`http://103.107.182.190/service1/department/${departmentID}`)
         .then((response) => setDepartment({ ...response.data.data }))
         .catch((err) => console.log(err));
@@ -69,7 +69,7 @@ function DepartmentForm({ mode }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (mode === "update") {
-      return axios
+      return axiosClient
         .put(`http://103.107.182.190/service1/department`, {
           department_name: department.department_name,
           description: department.description,
@@ -83,7 +83,7 @@ function DepartmentForm({ mode }) {
         .catch((err) => console.log(err));
     }
 
-    return axios
+    return axiosClient
       .post(`http://103.107.182.190/service1/department`, {
         department_name: department.department_name,
         description: department.description,

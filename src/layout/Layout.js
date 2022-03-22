@@ -11,14 +11,17 @@ import Term from "../pages/term/Term";
 import Department from "../pages/department/Department";
 import Category from "../pages/category/Category";
 import User from "../pages/user/User";
+import Idea from "../pages/idea/Idea";
 import UpdateTerm from "../pages/term/update/UpdateTerm";
 import UpdateDepartment from "../pages/department/update/UpdateDepartment";
 import UpdateCategory from "../pages/category/update/UpdateCategory";
 import UpdateUser from "../pages/user/update/UpdateUser";
+import UpdateIdea from "../pages/idea/update/UpdateIdea";
 import CreateTerm from "../pages/term/create/CreateTerm";
 import CreateDepartment from "../pages/department/create/CreateDepartment";
 import CreateCategory from "../pages/category/create/CreateCategory";
 import CreateUser from "../pages/user/create/CreateUser";
+import CreateIdea from "../pages/idea/create/CreateIdea";
 
 export default function Layout() {
   // const renderRoutes = (routes) => {
@@ -84,6 +87,13 @@ export default function Layout() {
               </Route>
               <Route path="/users/view" element={<User />} />
               <Route path="/users/create" element={<CreateUser />} />
+            </Route>
+            <Route path="/ideas">
+              <Route path="/ideas/update">
+                <Route path="/ideas/update/:ideaId" element={<UpdateIdea />} />
+              </Route>
+              <Route path="/ideas/view" element={<Idea />} />
+              <Route path="/ideas/create" element={<CreateIdea />} />
             </Route>
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>

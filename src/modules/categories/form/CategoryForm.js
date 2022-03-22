@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "../../../apis/axios.config";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 
@@ -15,7 +15,7 @@ function CategoryForm({ mode }) {
 
   useEffect(() => {
     if (mode === "update") {
-      axios
+      axiosClient
         .get(`http://103.107.182.190/service1/category/${cateId}`)
         .then((response) => setCategory({ ...response.data.data }))
         .catch((err) => console.log(err));
@@ -62,7 +62,7 @@ function CategoryForm({ mode }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (mode === "update") {
-      return axios
+      return axiosClient
         .put(`http://103.107.182.190/service1/category`, category)
         .then((response) => {
           console.log(response.data);
@@ -71,7 +71,7 @@ function CategoryForm({ mode }) {
         .catch((err) => console.log(err));
     }
 
-    return axios
+    return axiosClient
       .post(`http://103.107.182.190/service1/category`, {
         category_name: category.category_name,
         description: category.description,

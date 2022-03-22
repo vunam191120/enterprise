@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "../../../apis/axios.config";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DatePickerComponent } from "@syncfusion/ej2-react-calendars";
@@ -17,7 +17,7 @@ function TermForm({ mode }) {
 
   useEffect(() => {
     if (mode === "update") {
-      axios
+      axiosClient
         .get(`http://103.107.182.190/service1/term/${termID}`)
         .then((response) => {
           setTerm({ ...response.data.data });
@@ -71,7 +71,7 @@ function TermForm({ mode }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (mode === "update") {
-      return axios
+      return axiosClient
         .put(`http://103.107.182.190/service1/term`, {
           term_id: term.term_id,
           term_name: term.term_name,
@@ -88,7 +88,7 @@ function TermForm({ mode }) {
         .catch((err) => console.log(err));
     }
 
-    return axios
+    return axiosClient
       .post(`http://103.107.182.190/service1/term`, {
         term_name: term.term_name,
         start_date: new Date(term.start_date).toISOString(),

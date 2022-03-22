@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosClient from "../../../apis/axios.config";
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { AiOutlineUpload } from "react-icons/ai";
@@ -20,14 +20,14 @@ function UserForm({ mode }) {
 
   useEffect(() => {
     // Call Department
-    axios
+    axiosClient
       .get("http://103.107.182.190/service1/department")
       .then((response) => {
         setDepartments(response.data.data);
       })
       .catch((err) => console.log(err));
     if (mode === "update") {
-      axios
+      axiosClient
         .get(`http://103.107.182.190/service1/user/${username}`)
         .then((response) => {
           setUser({
@@ -108,7 +108,7 @@ function UserForm({ mode }) {
       formData.append("avatar", user.avatar);
       formData.append("old_image", oldImage);
 
-      return axios
+      return axiosClient
         .put(`http://103.107.182.190/service1/user/${user.user_id}`, formData)
         .then((response) => {
           console.log(response.data);
@@ -128,7 +128,7 @@ function UserForm({ mode }) {
     formData.append("department_id", +user.department_id);
     formData.append("avatar", user.avatar);
 
-    return axios
+    return axiosClient
       .post(`http://103.107.182.190/service1/user`, formData)
       .then((response) => {
         console.log(response.data);

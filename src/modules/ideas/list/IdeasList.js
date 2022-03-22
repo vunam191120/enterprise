@@ -4,66 +4,68 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
-import styles from "./DepartmentsList.module.css";
+import styles from "./IdeasList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
-import DepartmentTableHead from "./table-head";
+import IdeaTableHead from "./table-head";
 
-function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
-  const [departmentId, setDepartmentId] = useState("");
+function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
+  const [ideaId, setIdeaId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [departments, setDepartments] = useState([]);
+  const [ideas, setIdeas] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     axiosClient
-      .get("http://103.107.182.190/service1/department")
-      .then((response) => setDepartments(response.data.data));
+      .get("http://103.107.182.190/service1/idea")
+      .then((response) => setIdeas(response.data.data));
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
 
-  const onClickDelete = (deleteDepartmentId) => {
+  const onClickDelete = (deleteIdeaId) => {
     setIsOpen(true);
-    setDepartmentId(deleteDepartmentId);
+    setIdeaId(deleteIdeaId);
   };
 
-  const handleClickDeleteCate = (deleteDepartmentId) => {
+  const handleClickDeleteCate = (deleteIdeaId) => {
     axiosClient
-      .delete(
-        `http://103.107.182.190/service1/department/${deleteDepartmentId}`
-      )
+      .delete(`http://103.107.182.190/service1/idea/${deleteIdeaId}`)
       .then((response) => {
         console.log(response.data);
-        navigate("/departments/view", { replace: true });
+        navigate("/ideas/view", { replace: true });
       })
       .catch((err) => console.log(err));
   };
 
-  const renderRows = (department, index, onClickDelete) => (
+  const renderRows = (idea, index, onClickDelete) => (
     <tr
       style={{ backgroundColor: (index + 1) % 2 !== 0 ? "#f2edf3" : "#fff" }}
-      key={`${department.department_id} - ${index}`}
+      key={`${idea.idea_id} - ${index}`}
     >
-      <td>{department.department_name}</td>
-      <td>{department.manager_id}</td>
-      <td>{department.description}</td>
+      <td>{idea.user.full_name}</td>
+      <td>{idea.title}</td>
+      <td>{idea.description}</td>
+      <td>{idea.department.department_name}</td>
+      <td>{idea.category.category_name}</td>
+      <td>{idea.term.term_name}</td>
+      <td>{idea.status}</td>
       <td>
         <Link
           className={styles.iconAction}
-          to={`/departments/update/${department.department_id}`}
+          to={`/ideas/update/${idea.idea_id}`}
         >
           <BiEditAlt />
         </Link>
         <RiDeleteBin5Line
           className={styles.iconAction}
-          onClick={() => onClickDelete(department.department_id)}
+          onClick={() => onClickDelete(idea.idea_id)}
         />
       </td>
     </tr>
   );
 
-  if (departments.length === 0) {
+  if (ideas.length === 0) {
     return (
       <div>
         <Table loading={true} />
@@ -75,10 +77,10 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
     <div className={styles.container}>
       <Table
         loading={false}
-        head={<DepartmentTableHead />}
+        head={<IdeaTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={departments}
+        data={ideas}
         title={"Department List"}
       />
 
@@ -87,10 +89,10 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
         title="Confirm Information"
         message="Are you sure to delete this record?"
         onClose={handleClickClose}
-        onConfirm={() => handleClickDeleteCate(departmentId)}
+        onConfirm={() => handleClickDeleteCate(ideaId)}
       />
     </div>
   );
 }
 
-export default DepartmentsList;
+export default IdeasList;

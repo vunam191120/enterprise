@@ -18,7 +18,10 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   useEffect(() => {
     axiosClient
       .get("http://103.107.182.190/service1/user/")
-      .then((response) => setUsers(response.data.data));
+      .then((response) => {
+        setUsers(response.data.data.rows);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
