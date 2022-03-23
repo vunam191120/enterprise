@@ -7,12 +7,15 @@ function Comment({ data }) {
     let date1 = new Date();
     let date2 = new Date(oldDate);
     let distanceTime = ((date1 - date2) / (1000 * 3600 * 24)).toFixed(1);
-    console.log(distanceTime);
     if (distanceTime <= 0.9) {
       return `${(24 * distanceTime).toFixed(0)} hours ago`;
     }
     return `${distanceTime.toFixed()} days ago`;
   };
+
+  if (data.length === 0) {
+    return <p>No data</p>;
+  }
 
   return (
     <div className={styles.container}>

@@ -22,22 +22,23 @@ function IdeaDetail() {
   const [idea, setIdea] = useState(null);
   const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    // Get Idea
-    axiosClient
-      .get(`http://103.107.182.190/service1/idea/${ideaId}`)
-      .then((response) => {
-        setIdea(response.data.data);
-      })
-      .catch((err) => console.log(err));
+  async function getIdea() {
+    let res = await axiosClient.get(
+      `http://103.107.182.190/service1/idea/${ideaId}`
+    );
+    setIdea(res.data.data);
+  }
 
-    // Get Comment of the idea
-    axiosClient
-      .get(`http://103.107.182.190/service1/comment/${ideaId}`)
-      .then((response) => {
-        setComments(response.data.data);
-      })
-      .catch((err) => console.log(err));
+  async function getIdeaComment() {
+    let res = await axiosClient.get(
+      `http://103.107.182.190/service1/comment/${ideaId}`
+    );
+    setComments(res.data.data);
+  }
+
+  useEffect(() => {
+    getIdea();
+    getIdeaComment();
   }, []);
 
   const onClickDownload = () => {
