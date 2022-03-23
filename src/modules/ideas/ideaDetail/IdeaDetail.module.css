@@ -1,0 +1,151 @@
+:root {
+  --border--radius-1: 3px;
+}
+
+.container {
+  padding: 2.5rem 2.5rem;
+  background-color: #fff;
+  border-radius: 0.3125rem;
+}
+
+.title {
+  color: #343a40;
+  font-size: 1.125rem;
+  margin: 0 0 2rem 0;
+}
+
+.header {
+  display: flex;
+  margin-bottom: 44px;
+}
+
+.header .imgContainer {
+  flex-grow: 1;
+  margin-right: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgContainer img {
+  display: inline-block;
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+}
+
+.heading {
+  flex-grow: 3;
+}
+
+.heading h3 {
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.heading h4 {
+  font-size: 1.25rem;
+  line-height: 28px;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+
+.heading p {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.description {
+  padding: 0 40px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-align: justify;
+  margin-bottom: 44px;
+}
+
+.nav {
+  border-top: 1px solid #dbdbdb;
+  display: flex;
+  justify-content: center;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #8e8e8e;
+  margin-right: 60px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.navLink:last-child {
+  margin-right: 0;
+}
+
+.navLink.active {
+  color: #262626;
+}
+
+.navLink span {
+  margin-left: 6px;
+}
+
+/* RenderPreview */
+
+.item {
+  width: 260px;
+  height: 260px;
+  border: 1px solid #dadce0;
+  border-radius: var(--border--radius-1);
+  position: relative;
+  transition: 0.4s ease;
+  cursor: pointer;
+}
+
+.item:hover {
+  transform: translateY(-5px);
+}
+
+.item img {
+  position: absolute;
+  display: block;
+  border-radius: var(--border--radius-1);
+  width: 100%;
+  height: 100%;
+}
+
+.icon {
+  font-size: 20px;
+  margin-right: 10px;
+  transform: translateY(-1px);
+}
+
+.fileNameContainer {
+  background-color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px 8px 16px;
+  width: 100%;
+  border-bottom-left-radius: var(--border--radius-1);
+  border-bottom-right-radius: var(--border--radius-1);
+}
+
+.fileNameContent {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.72);
+  font-size: 0.875rem;
+}

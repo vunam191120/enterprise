@@ -1,0 +1,42 @@
+.container {
+  padding: 0 40px;
+}
+
+.item {
+  padding: 12px 0;
+  width: auto;
+  display: flex;
+}
+
+.imgContainer {
+  width: 60px;
+  display: block;
+  margin-right: 18px;
+}
+
+.imgContainer img {
+  height: 60px;
+  width: 60px;
+  display: block;
+}
+
+.content {
+  flex: 1;
+  color: #262626;
+}
+
+.content .name,
+.content .commentContent {
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.content .commentContent {
+  font-weight: 400;
+}
+
+.date {
+  color: #8e8e8e;
+  font-size: 12px;
+}

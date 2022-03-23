@@ -3,6 +3,7 @@ import axiosClient from "../../../apis/axios.config";
 import { Link, useNavigate } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { ImEye } from "react-icons/im";
 
 import styles from "./IdeasList.module.css";
 import Popup from "../../../component/popup/Popup";
@@ -43,14 +44,17 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
       style={{ backgroundColor: (index + 1) % 2 !== 0 ? "#f2edf3" : "#fff" }}
       key={`${idea.idea_id} - ${index}`}
     >
-      <td>{idea.user.full_name}</td>
+      <td>{idea.full_name}</td>
       <td>{idea.title}</td>
       <td>{idea.description}</td>
-      <td>{idea.department.department_name}</td>
-      <td>{idea.category.category_name}</td>
-      <td>{idea.term.term_name}</td>
+      <td>{idea.department_name}</td>
+      <td>{idea.category_name}</td>
+      <td>{idea.term_name}</td>
       <td>{idea.status}</td>
       <td>
+        <Link className={styles.iconAction} to={`/ideas/${idea.idea_id}`}>
+          <ImEye />
+        </Link>
         <Link
           className={styles.iconAction}
           to={`/ideas/update/${idea.idea_id}`}
@@ -81,7 +85,7 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
         data={ideas}
-        title={"Department List"}
+        title={"Idea List"}
       />
 
       <Popup

@@ -127,6 +127,7 @@ function IdeaForm({ mode }) {
             )}
           </div>
         </div>
+        <button onClick={() => console.log(preview)}>Log</button>
         <Button
           type={"submit"}
           buttonSize={"btnLarge"}

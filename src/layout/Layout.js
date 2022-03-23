@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import styles from "./Layout.module.css";
 // import clsx from "clsx";
-import { Routes, Route, Outlet, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Header from "../component/header/Header";
 import Sidebar from "../component/sidebar/Sidebar";
@@ -12,6 +12,7 @@ import Department from "../pages/department/Department";
 import Category from "../pages/category/Category";
 import User from "../pages/user/User";
 import Idea from "../pages/idea/Idea";
+import IdeaDetail from "../modules/ideas/ideaDetail/IdeaDetail";
 import UpdateTerm from "../pages/term/update/UpdateTerm";
 import UpdateDepartment from "../pages/department/update/UpdateDepartment";
 import UpdateCategory from "../pages/category/update/UpdateCategory";
@@ -49,53 +50,42 @@ export default function Layout() {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/terms">
-              <Route path="/terms/update">
-                <Route path="/terms/update/:termID" element={<UpdateTerm />} />
+              <Route path="update">
+                <Route path=":termID" element={<UpdateTerm />} />
               </Route>
-              <Route path="/terms/create" element={<CreateTerm />} />
-              <Route path="/terms/view" element={<Term />} />
+              <Route path="create" element={<CreateTerm />} />
+              <Route path="view" element={<Term />} />
             </Route>
             <Route path="/departments">
-              <Route path="/departments/update">
-                <Route
-                  path="/departments/update/:departmentID"
-                  element={<UpdateDepartment />}
-                />
+              <Route path="update">
+                <Route path=":departmentID" element={<UpdateDepartment />} />
               </Route>
-              <Route
-                path="/departments/create"
-                element={<CreateDepartment />}
-              />
-              <Route path="/departments/view" element={<Department />} />
+              <Route path="create" element={<CreateDepartment />} />
+              <Route path="view" element={<Department />} />
             </Route>
             <Route path="/categories">
-              <Route path="/categories/update">
-                <Route
-                  path="/categories/update/:cateId"
-                  element={<UpdateCategory />}
-                />
+              <Route path="update">
+                <Route path=":cateId" element={<UpdateCategory />} />
               </Route>
-              <Route path="/categories/create" element={<CreateCategory />} />
-              <Route path="/categories/view" element={<Category />} />
+              <Route path="create" element={<CreateCategory />} />
+              <Route path="view" element={<Category />} />
             </Route>
             <Route path="/users">
-              <Route path="/users/update">
-                <Route
-                  path="/users/update/:username"
-                  element={<UpdateUser />}
-                />
+              <Route path="update">
+                <Route path=":username" element={<UpdateUser />} />
               </Route>
-              <Route path="/users/view" element={<User />} />
-              <Route path="/users/create" element={<CreateUser />} />
+              <Route path="view" element={<User />} />
+              <Route path="create" element={<CreateUser />} />
             </Route>
             <Route path="/ideas">
-              <Route path="/ideas/update">
-                <Route path="/ideas/update/:ideaId" element={<UpdateIdea />} />
+              <Route path=":ideaId/*" element={<IdeaDetail />}></Route>
+              <Route path="update">
+                <Route path=":ideaId" element={<UpdateIdea />} />
               </Route>
-              <Route path="/ideas/view" element={<Idea />} />
-              <Route path="/ideas/create" element={<CreateIdea />} />
+              <Route path="view" element={<Idea />} />
+              <Route path="create" element={<CreateIdea />} />
             </Route>
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
           </Routes>
           {/* <Outlet /> */}
         </div>
