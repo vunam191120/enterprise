@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../apis/axios.config";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -13,12 +13,14 @@ function TermsList({ currentPage, onCurrentPage, onPageSize }) {
   const [termId, setTermId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [terms, setTerms] = useState([]);
-  const navigate = useNavigate();
+
+  async function getTerms() {
+    let res = await axiosClient.get("http://103.107.182.190/service1/term");
+    setTerms(res.data.data);
+  }
 
   useEffect(() => {
-    axiosClient
-      .get("http://103.107.182.190/service1/term")
-      .then((response) => setTerms(response.data.data));
+    getTerms();
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -33,7 +35,7 @@ function TermsList({ currentPage, onCurrentPage, onPageSize }) {
       .delete(`http://103.107.182.190/service1/term/${deleteTermId}`)
       .then((response) => {
         console.log(response.data);
-        navigate("/terms/view", { replace: true });
+        getTerms();
       })
       .catch((err) => console.log(err));
   };

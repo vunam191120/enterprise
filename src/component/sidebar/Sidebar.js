@@ -4,12 +4,14 @@ import clsx from "clsx";
 import { ImStack } from "react-icons/im";
 import { BsFillBookmarkCheckFill } from "react-icons/bs";
 
-import sidebarQAM from "./sidebarData";
+import sidebarAdmin from "./sidebarData";
 import avatar from "./../../assets/user/avatar/avt1.jpg";
 import SidebarItem from "./sidebarItem/SidebarItem";
+import checkRole from "../../helpers/checkRole";
 
 export default function Sidebar(props) {
-  const sidebarList = props.type === "QAM" ? sidebarQAM : null;
+  const sidebarList = props.type === "Admin" ? sidebarAdmin : null;
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   return (
     <>
@@ -20,12 +22,12 @@ export default function Sidebar(props) {
       <div className={clsx(styles.avtarContainer)}>
         <img
           className={clsx(styles.avataImg)}
-          src={avatar}
+          src={`http://103.107.182.190/${currentUser.avatar}`}
           alt="Avatar User from sidebar"
         />
         <div className={clsx(styles.userInfo)}>
-          <p>Vu Hai Nam</p>
-          <p>Front End Developer</p>
+          <p>{currentUser.full_name}</p>
+          <p>{checkRole(currentUser.role_id)}</p>
         </div>
         <BsFillBookmarkCheckFill
           style={{ color: "#1bcfb4", fontSize: "16px" }}

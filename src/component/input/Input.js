@@ -7,7 +7,7 @@ export default function Input({ config, onChange }) {
     // target.value = !isTrueSet;
     // target.checked = !isTrueSet;
     // newData = !isTrueSet;
-    if (config.type === "file") {
+    if (config.type === "file" || config.type === "checkbox") {
       return onChange(target);
     }
     if (config.type === "search") {

@@ -12,6 +12,8 @@
   color: #212529;
   border-collapse: collapse;
   text-align-last: left;
+  overflow-x: scroll;
+  white-space: nowrap;
 }
 
 .table th {

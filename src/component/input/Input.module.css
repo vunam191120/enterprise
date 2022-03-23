@@ -28,9 +28,9 @@
 }
 
 /* Hide the default checkbox */
-input[type="checkbox"] {
+/* input[type="checkbox"] {
   visibility: hidden;
-}
+} */
 
 /* Creating a custom checkbox based on demand */
 .mark {

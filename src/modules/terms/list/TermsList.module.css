@@ -1,4 +1,5 @@
 .container {
+  overflow-x: scroll;
   background-color: #fff;
   padding: 2.5rem 2.5rem;
   width: 100%;

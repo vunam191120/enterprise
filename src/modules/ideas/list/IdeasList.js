@@ -14,12 +14,15 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
   const [ideaId, setIdeaId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [ideas, setIdeas] = useState([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  async function getIdeas() {
+    let res = await axiosClient.get("http://103.107.182.190/service1/idea");
+    setIdeas(res.data.data);
+  }
 
   useEffect(() => {
-    axiosClient
-      .get("http://103.107.182.190/service1/idea")
-      .then((response) => setIdeas(response.data.data));
+    getIdeas();
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -34,7 +37,7 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
       .delete(`http://103.107.182.190/service1/idea/${deleteIdeaId}`)
       .then((response) => {
         console.log(response.data);
-        navigate("/ideas/view", { replace: true });
+        getIdeas();
       })
       .catch((err) => console.log(err));
   };

@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import { BiSend } from "react-icons/bi";
+import { FaMask } from "react-icons/fa";
+import { IoCloseCircleOutline } from "react-icons/io5";
 
 import styles from "./Comment.module.css";
+import Switch from "../switch/Switch";
+import Button from "../button/Button";
 
-function Comment({ data }) {
+function Comment({ data, handleOnSubmit, onClickDeleteButton }) {
+  const [comment, setComment] = useState("");
+  const [statusSwitch, setStatusSwitch] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
   const calculateTime = (oldDate) => {
     let date1 = new Date();
     let date2 = new Date(oldDate);
@@ -10,11 +19,58 @@ function Comment({ data }) {
     if (distanceTime <= 0.9) {
       return `${(24 * distanceTime).toFixed(0)} hours ago`;
     }
-    return `${distanceTime.toFixed()} days ago`;
+    return `${(+distanceTime).toFixed(0)} days ago`;
+  };
+
+  const handleOnchange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleSwtich = (value) => {
+    setStatusSwitch(value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleOnSubmit(comment, statusSwitch);
+    setComment("");
+  };
+
+  const handleDelete = (commentId, commentContent) => {
+    onClickDeleteButton(commentId, commentContent);
   };
 
   if (data.length === 0) {
-    return <p>No data</p>;
+    return (
+      <div>
+        <p>This idea has no comment</p>
+        <form onSubmit={handleSubmit} className={styles.inputContainer}>
+          <div className={styles.imgContainer}>
+            <img
+              className={styles.avtComment}
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo8u47GCetG3Cu5fX5R4MBBPl3WK12OhWUlQ&usqp=CAU"
+              alt="Avatar User Comment"
+            />
+          </div>
+          <div className={styles.inputContent}>
+            <div className={styles.switchContainer}>
+              <span>Anonymous: </span>
+              <Switch onChange={handleSwtich} isChecked={statusSwitch} />
+            </div>
+            <textarea
+              rows={4}
+              onChange={handleOnchange}
+              placeholder="Add a comment ..."
+              className={styles.inputComment}
+              value={comment}
+            ></textarea>
+          </div>
+          <Button type="submit" className={styles.submitIcon}>
+            <BiSend />
+          </Button>
+        </form>
+      </div>
+    );
   }
 
   return (
@@ -28,12 +84,56 @@ function Comment({ data }) {
             />
           </div>
           <div className={styles.content}>
-            <h4 className={styles.name}>{comment.user.full_name}</h4>
-            <p className={styles.commentContent}>{comment.comment}</p>
-            <p className={styles.date}>{calculateTime(comment.created_date)}</p>
+            <div>
+              <h4 className={styles.name}>
+                {comment.user.full_name}{" "}
+                {comment.anonymous === true && (
+                  <FaMask className={styles.mask} />
+                )}
+              </h4>
+              <p className={styles.commentContent}>{comment.comment}</p>
+              <p className={styles.date}>
+                {calculateTime(comment.created_date)}
+              </p>
+            </div>
+            {(currentUser.role_id === 2 ||
+              currentUser.user_id === comment.user_id) && (
+              <IoCloseCircleOutline
+                onClick={() =>
+                  handleDelete(comment.comment_id, comment.comment)
+                }
+                className={styles.deleteIcon}
+              />
+            )}
           </div>
         </div>
       ))}
+      {/* Comment Input */}
+      <form onSubmit={handleSubmit} className={styles.inputContainer}>
+        <div className={styles.imgContainer}>
+          <img
+            className={styles.avtComment}
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo8u47GCetG3Cu5fX5R4MBBPl3WK12OhWUlQ&usqp=CAU"
+            alt="Avatar User Comment"
+          />
+        </div>
+        <div className={styles.inputContent}>
+          <div className={styles.switchContainer}>
+            <span>Anonymous: </span>
+            <Switch onChange={handleSwtich} isChecked={statusSwitch} />
+          </div>
+          <textarea
+            rows={4}
+            onChange={handleOnchange}
+            placeholder="Add a comment ..."
+            className={styles.inputComment}
+            value={comment}
+          ></textarea>
+        </div>
+        <Button type="submit" className={styles.submitIcon}>
+          <BiSend />
+        </Button>
+      </form>
     </div>
   );
 }

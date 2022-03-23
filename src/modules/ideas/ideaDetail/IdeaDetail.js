@@ -10,6 +10,7 @@ import styles from "./IdeaDetail.module.css";
 import Preview from "../../../component/preview/Preview";
 import Comment from "../../../component/comment/Comment";
 import Others from "../../../component/others/Others";
+import Popup from "../../../component/popup/Popup";
 
 const navs = [
   { name: "documents", icon: <BsGrid3X3 /> },
@@ -19,9 +20,12 @@ const navs = [
 
 function IdeaDetail() {
   const { ideaId } = useParams();
+  const [commentId, setCommentId] = useState(null);
+  const [commentContent, setCommentContent] = useState(null);
   const [idea, setIdea] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [comments, setComments] = useState([]);
-  
+
   async function getIdea() {
     let res = await axiosClient.get(
       `http://103.107.182.190/service1/idea/${ideaId}`
@@ -41,8 +45,41 @@ function IdeaDetail() {
     getIdeaComment();
   }, []);
 
+  const handleClickClose = () => setIsOpen(false);
+
   const onClickDownload = () => {
     console.log("Clicked Item");
+  };
+
+  const onClickDelete = (deleteCommentId, deleteComentContent) => {
+    setIsOpen(true);
+    setCommentId(deleteCommentId);
+    setCommentContent(deleteComentContent);
+  };
+
+  const handleSubmitComment = (comment, statusSwitch) => {
+    axiosClient
+      .post(`http://103.107.182.190/service1/comment`, {
+        idea_id: idea.idea_id,
+        anonymous: statusSwitch,
+        comment: comment,
+      })
+      .then((response) => {
+        getIdeaComment();
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleClickDeleteComment = (commentId, commentContent, ideaId) => {
+    axiosClient
+      .delete(`http://103.107.182.190/service1/comment/${commentId}`, {
+        comment: commentContent,
+      })
+      .then((res) => {
+        console.log(res.data);
+        getIdeaComment();
+      })
+      .catch((err) => console.log(err));
   };
 
   const renderPreview = (doc, index, onClickDownload) => (
@@ -81,10 +118,10 @@ function IdeaDetail() {
           </div>
           <div className={styles.heading}>
             <h3>Title: {idea.title}</h3>
-            <h4>Vu Hai Nam {idea.user_id}</h4>
-            <p>Category: {idea.category_id}</p>
-            <p>Department: {idea.department_id}</p>
-            <p>Term: {idea.term_id}</p>
+            <h4>Created by: {idea.full_name}</h4>
+            <p>Category: {idea.category_name}</p>
+            <p>Department: {idea.department_name}</p>
+            <p>Term: {idea.term_name}</p>
           </div>
         </div>
         <div className={styles.body}>
@@ -119,7 +156,31 @@ function IdeaDetail() {
                   />
                 }
               />
-              <Route path="comments" element={<Comment data={comments} />} />
+              <Route
+                path="comments"
+                element={
+                  <>
+                    <Comment
+                      onClickDeleteButton={onClickDelete}
+                      handleOnSubmit={handleSubmitComment}
+                      data={comments}
+                    />
+                    <Popup
+                      isOpen={isOpen}
+                      title="Confirm Information"
+                      message="Are you sure to delete this comment?"
+                      onClose={handleClickClose}
+                      onConfirm={() =>
+                        handleClickDeleteComment(
+                          commentId,
+                          commentContent,
+                          ideaId
+                        )
+                      }
+                    />
+                  </>
+                }
+              />
               <Route path="others" element={<Others />} />
             </Routes>
             <Outlet />

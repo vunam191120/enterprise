@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
+
 import styles from "./LoginForm.module.css";
-import axios from "axios";
 import slider from "./../../assets/background/loginBg.png";
 import Input from "../../component/input/Input";
 import Button from "../../component/button/Button";
-
-import { useNavigate } from "react-router-dom";
 import { isLogin } from "../../helpers/isLogin";
+import axiosClient from "../../apis/axios.config";
 
 export default function LoginForm() {
   const [account, setAccount] = useState({ username: "", password: "" });
@@ -20,15 +20,23 @@ export default function LoginForm() {
     }
   }, []);
 
+  async function getToken() {
+    const res = await axiosClient.post(
+      "http://103.107.182.190/service1/login",
+      account
+    );
+    localStorage.setItem("accessToken", res.data.token);
+
+    const currentUser = await axiosClient.get(
+      "http://103.107.182.190/service1/identity"
+    );
+    localStorage.setItem("currentUser", JSON.stringify(currentUser.data.data));
+    navigate("/dashboard", { replace: true });
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios
-      .post("http://103.107.182.190/service1/login", account)
-      .then((response) => {
-        localStorage.setItem("accessToken", response.data.token);
-        navigate("/dashboard", { replace: true });
-      })
-      .catch((err) => console.log(err));
+    getToken();
   };
 
   const configInput = (id, className, nameAtt, type, value, placeholder) => {

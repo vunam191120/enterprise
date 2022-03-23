@@ -22,6 +22,7 @@
 }
 
 .content {
+  overflow-x: scroll;
   background-color: #f2edf3;
   padding: 44px 36px;
   min-height: calc(100vh - 70px);

@@ -8,7 +8,9 @@ function Preview({ renderBody, data, onClickItem }) {
     if (data.length === 0 || !data) {
       return (
         <div>
-          <td>No data</td>
+          <td>
+            <p>No data</p>
+          </td>
         </div>
       );
     }

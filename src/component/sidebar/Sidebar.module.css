@@ -21,8 +21,8 @@
 
 .avataImg {
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
 }
 
 .userInfo {
@@ -33,6 +33,7 @@
 .userInfo > p:first-child {
   font-weight: 700;
   font-family: "ubuntu-bold", sans-serif;
+  font-size: 0.875rem;
 }
 
 .userInfo > p:last-child {

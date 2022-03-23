@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../apis/axios.config";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -13,12 +13,15 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
   const [aggrementId, setCateID] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [aggrements, setAggrements] = useState([]);
-  const navigate = useNavigate();
 
+  async function getAggrements() {
+    let res = await axiosClient.get(
+      "http://103.107.182.190/service1/aggrement"
+    );
+    setAggrements(res.data.data);
+  }
   useEffect(() => {
-    axiosClient
-      .get("http://103.107.182.190/service1/aggrement")
-      .then((response) => setAggrements(response.data.data));
+    getAggrements();
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -33,7 +36,7 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
       .delete(`http://103.107.182.190/service1/aggrement/${deleteCateId}`)
       .then((response) => {
         console.log(response.data);
-        navigate(-1);
+        getAggrements();
       })
       .catch((err) => console.log(err));
   };
@@ -44,7 +47,7 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
       key={`${aggrement.aggrement_id} - ${index}`}
     >
       <td>{aggrement.aggrement_name}</td>
-      <td>{aggrement.description}</td>      
+      <td>{aggrement.description}</td>
       <td>
         {aggrement.status ? (
           <span className={styles.badgeActive}>Active</span>

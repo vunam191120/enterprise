@@ -11,6 +11,7 @@ import Term from "../pages/term/Term";
 import Department from "../pages/department/Department";
 import Category from "../pages/category/Category";
 import User from "../pages/user/User";
+import Profile from "../pages/user/profile/Profile";
 import Idea from "../pages/idea/Idea";
 import IdeaDetail from "../modules/ideas/ideaDetail/IdeaDetail";
 import UpdateTerm from "../pages/term/update/UpdateTerm";
@@ -23,7 +24,7 @@ import CreateDepartment from "../pages/department/create/CreateDepartment";
 import CreateCategory from "../pages/category/create/CreateCategory";
 import CreateUser from "../pages/user/create/CreateUser";
 import CreateIdea from "../pages/idea/create/CreateIdea";
-import Aggrement from "../pages/aggrement/Aggrement"
+import Aggrement from "../pages/aggrement/Aggrement";
 import CreateAggrement from "../pages/aggrement/create/CreateAggrement";
 import UpdateAggrement from "../pages/aggrement/update/UpdateAggrement";
 
@@ -44,7 +45,7 @@ export default function Layout() {
   return (
     <div className={styles.app}>
       <div className={styles.sidebar}>
-        <Sidebar type="QAM" />
+        <Sidebar type="Admin" />
       </div>
       <div className={styles.contentContainer}>
         <Header onClick={showSidebar} />
@@ -74,6 +75,7 @@ export default function Layout() {
               <Route path="view" element={<Category />} />
             </Route>
             <Route path="/users">
+              <Route path="profile" element={<Profile />} />
               <Route path="update">
                 <Route path=":username" element={<UpdateUser />} />
               </Route>

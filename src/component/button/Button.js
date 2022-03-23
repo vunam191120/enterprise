@@ -38,7 +38,8 @@ export default function Button(props) {
       className={clsx(
         styles.btn,
         styles[props.buttonStyle],
-        styles[props.buttonSize]
+        styles[props.buttonSize],
+        props.className
       )}
       type={props.type}
       onClick={props.onClick}

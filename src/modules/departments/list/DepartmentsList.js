@@ -15,10 +15,15 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
   const [departments, setDepartments] = useState([]);
   const navigate = useNavigate();
 
+  async function getDepartments() {
+    let res = await axiosClient.get(
+      "http://103.107.182.190/service1/department"
+    );
+    setDepartments(res.data.data);
+  }
+
   useEffect(() => {
-    axiosClient
-      .get("http://103.107.182.190/service1/department")
-      .then((response) => setDepartments(response.data.data));
+    getDepartments();
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -33,10 +38,7 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
       .delete(
         `http://103.107.182.190/service1/department/${deleteDepartmentId}`
       )
-      .then((response) => {
-        console.log(response.data);
-        navigate("/departments/view", { replace: true });
-      })
+      .then((response) => getDepartments())
       .catch((err) => console.log(err));
   };
 

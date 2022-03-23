@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../apis/axios.config";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -13,15 +13,14 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
+
+  async function getUsers() {
+    let res = await axiosClient.get("http://103.107.182.190/service1/user/");
+    setUsers(res.data.data.rows);
+  }
 
   useEffect(() => {
-    axiosClient
-      .get("http://103.107.182.190/service1/user/")
-      .then((response) => {
-        setUsers(response.data.data.rows);
-      })
-      .catch((err) => console.log(err));
+    getUsers();
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -36,7 +35,7 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
       .delete(`http://103.107.182.190/service1/user/${deleteUserId}`)
       .then((response) => {
         console.log(response.data);
-        navigate("/users/view", { replace: true });
+        getUsers();
       })
       .catch((err) => console.log(err));
   };

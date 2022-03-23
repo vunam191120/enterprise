@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { GoThreeBars } from "react-icons/go";
 import { FiSearch } from "react-icons/fi";
@@ -11,14 +11,18 @@ import {
 import { BiEnvelope } from "react-icons/bi";
 import { AiOutlineBell } from "react-icons/ai";
 import { BsPower } from "react-icons/bs";
+import { CgProfile } from "react-icons/cg";
+import { IoMdSettings } from "react-icons/io";
+import clsx from "clsx";
 
-import avatar from "./../../assets/user/avatar/avt1.jpg";
 import styles from "./Header.module.css";
 import Search from "../search/Search";
 
 export default function Header() {
   const [search, setSearch] = useState("");
+  const [expand, setExpand] = useState(false);
   const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   const configInput = (id, className, nameAtt, type, value, placeholder) => {
     return {
@@ -37,6 +41,7 @@ export default function Header() {
 
   const logout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("currentUser");
     navigate("/login", { replace: true });
   };
 
@@ -58,10 +63,30 @@ export default function Header() {
         />
       </div>
       <div className={styles.right}>
-        <div className={styles.user}>
-          <img src={avatar} alt="Avatar user" />
-          <p>Vu Hai Nam</p>
-          <MdKeyboardArrowDown className={styles.iconRight} />
+        <div
+          onClick={() => setExpand(!expand)}
+          className={clsx(styles.user, expand ? styles.expand : "")}
+        >
+          <img
+            src={`http://103.107.182.190/${currentUser.avatar}`}
+            alt="Avatar user"
+          />
+          <p>{currentUser.full_name}</p>
+          {!expand ? (
+            <MdKeyboardArrowDown className={styles.iconRight} />
+          ) : (
+            <MdKeyboardArrowUp className={styles.iconRight} />
+          )}
+          <div className={styles.subNav}>
+            <Link className={styles.subNavLink} to="/users/profile">
+              <CgProfile className={styles.subNavIcon} />
+              My profile
+            </Link>
+            <Link className={styles.subNavLink} to="/users/profile">
+              <IoMdSettings className={styles.subNavIcon} />
+              Settings
+            </Link>
+          </div>
         </div>
         <IconContext.Provider value={{ className: styles.iconsAction }}>
           <MdFullscreen />

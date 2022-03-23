@@ -1,11 +1,11 @@
-import { MdSpaceDashboard, MdManageAccounts } from "react-icons/md";
+import { MdSpaceDashboard, MdManageAccounts, MdPolicy } from "react-icons/md";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { BiCategoryAlt } from "react-icons/bi";
 import { IoMedkit } from "react-icons/io5";
 import { FaRegLightbulb } from "react-icons/fa";
 import { BsCalendar2Date } from "react-icons/bs";
 
-const SidebarQAM = [
+const SidebarAdmin = [
   {
     title: "Dashboard",
     path: "/dashboard",
@@ -101,7 +101,7 @@ const SidebarQAM = [
   {
     title: "Aggrement",
     path: "/aggrement",
-    icon: <BiCategoryAlt />,
+    icon: <MdPolicy />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
     subNav: [
@@ -117,4 +117,4 @@ const SidebarQAM = [
   },
 ];
 
-export default SidebarQAM;
+export default SidebarAdmin;
