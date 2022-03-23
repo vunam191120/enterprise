@@ -98,6 +98,23 @@ const SidebarQAM = [
       },
     ],
   },
+  {
+    title: "Aggrement",
+    path: "/aggrement",
+    icon: <BiCategoryAlt />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "View",
+        path: "/aggrements/view",
+      },
+      {
+        title: "Create",
+        path: "/aggrements/create",
+      },
+    ],
+  },
 ];
 
 export default SidebarQAM;

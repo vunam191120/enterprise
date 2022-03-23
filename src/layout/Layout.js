@@ -23,6 +23,9 @@ import CreateDepartment from "../pages/department/create/CreateDepartment";
 import CreateCategory from "../pages/category/create/CreateCategory";
 import CreateUser from "../pages/user/create/CreateUser";
 import CreateIdea from "../pages/idea/create/CreateIdea";
+import Aggrement from "../pages/aggrement/Aggrement"
+import CreateAggrement from "../pages/aggrement/create/CreateAggrement";
+import UpdateAggrement from "../pages/aggrement/update/UpdateAggrement";
 
 export default function Layout() {
   // const renderRoutes = (routes) => {
@@ -84,6 +87,13 @@ export default function Layout() {
               </Route>
               <Route path="view" element={<Idea />} />
               <Route path="create" element={<CreateIdea />} />
+            </Route>
+            <Route path="/aggrements">
+              <Route path="update">
+                <Route path=":aggrementId" element={<UpdateAggrement />} />
+              </Route>
+              <Route path="create" element={<CreateAggrement />} />
+              <Route path="view" element={<Aggrement />} />
             </Route>
             {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
           </Routes>
