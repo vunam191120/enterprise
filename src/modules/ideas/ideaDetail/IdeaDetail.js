@@ -21,7 +21,7 @@ function IdeaDetail() {
   const { ideaId } = useParams();
   const [idea, setIdea] = useState(null);
   const [comments, setComments] = useState([]);
-
+  
   async function getIdea() {
     let res = await axiosClient.get(
       `http://103.107.182.190/service1/idea/${ideaId}`
