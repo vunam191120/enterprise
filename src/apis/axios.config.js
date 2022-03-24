@@ -15,4 +15,25 @@ axiosClient.interceptors.request.use(async (config) => {
   return config;
 });
 
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (!error.response) {
+
+    }
+    switch (error.response.status) {
+      case 401:
+        localStorage.removeItem('token');
+        break;
+      default:
+        // window.location.href = '/error';
+        break;
+    }
+
+    return error;
+  },
+);
+
 export default axiosClient;
