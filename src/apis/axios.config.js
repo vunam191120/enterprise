@@ -15,4 +15,22 @@ axiosClient.interceptors.request.use(async (config) => {
   return config;
 });
 
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    switch (error.response.status) {
+      case 401:
+        alert("Login session has expired!");
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem("accessToken");
+        window.location.href = "/login";
+        break;
+      default:
+        break;
+    }
+  }
+);
+
 export default axiosClient;

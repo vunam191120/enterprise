@@ -1,26 +1,57 @@
 import axiosClient from "../../../apis/axios.config";
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React, { useState, useEffect, Fragment } from "react";
+import { useParams } from "react-router-dom";
+import {
+  AiOutlineFile,
+  AiOutlineCloudUpload,
+  AiFillCloseCircle,
+} from "react-icons/ai";
+import clsx from "clsx";
 
 import styles from "./IdeaForm.module.css";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
+import Select from "../../../component/select/Select";
+import Preview from "../../../component/preview/Preview";
 
 function IdeaForm({ mode }) {
-  const navigate = useNavigate();
   const { ideaId } = useParams();
   const [idea, setIdea] = useState(null);
-  const [preview, setPreview] = useState([]);
+  const [categories, setCategories] = useState(null);
+  const [terms, setTerms] = useState(null);
+
+  async function getTerms() {
+    const res = await axiosClient.get(`http://103.107.182.190/service1/term`);
+    setTerms(res.data.data);
+  }
+
+  async function getCategories() {
+    const res = await axiosClient.get(
+      `http://103.107.182.190/service1/category`
+    );
+    setCategories(res.data.data);
+  }
+
+  async function getOneIdea() {
+    const res = await axiosClient.get(
+      `http://103.107.182.190/service1/idea/${ideaId}`
+    );
+    setIdea(res.data.data);
+  }
 
   useEffect(() => {
+    getTerms();
+    getCategories();
     if (mode === "update") {
-      axiosClient
-        .get(`http://103.107.182.190/service1/idea/${ideaId}`)
-        .then((response) => setIdea({ ...response.data.data }))
-        .catch((err) => console.log(err));
+      getOneIdea();
     } else if (mode === "create") {
-      setIdea({});
+      setIdea({
+        title: "",
+        documents: [],
+        description: "",
+        category_id: "",
+      });
     }
   }, []);
 
@@ -32,7 +63,10 @@ function IdeaForm({ mode }) {
     value,
     placeholder,
     accept,
-    disabled
+    multiple,
+    disabled,
+    hidden,
+    required
   ) => {
     return {
       id: id,
@@ -43,39 +77,132 @@ function IdeaForm({ mode }) {
       placeholder: placeholder,
       accept: accept,
       disabled: disabled,
+      multiple: multiple,
+      hidden: hidden,
+      required: required,
     };
   };
 
-  const handleOnChange = (target) => {
-    setIdea({ ...idea, [target.name]: target.value });
+  const renderPreview = (doc, index, docs, onClickDownload) => {
+    if (index === docs.length - 1) {
+      return (
+        <Fragment key={`${index} ${docs}`}>
+          <div className={styles.previewItem} onClick={() => onClickDownload()}>
+            <img
+              className={styles.thumbnail}
+              src="https://i.pinimg.com/originals/aa/13/db/aa13dbd443f78ba5b2a08feedba95dfd.jpg"
+              alt="Document"
+            />
+            <div className={styles.fileNameContainer}>
+              <AiOutlineFile className={styles.previewIcon} />
+              <span className={styles.fileNameContent}>{doc.name}</span>
+            </div>
+            <AiFillCloseCircle
+              onClick={() => handleDeleteFile(index)}
+              className={styles.deleteIcon}
+            />
+          </div>
+          <label
+            htmlFor="documents"
+            className={clsx(styles.previewItem, styles.uploadBtn)}
+          >
+            <AiOutlineCloudUpload className={styles.uploadIcon} />
+            <p>Upload</p>
+            <Input
+              onChange={handleOnFileChange}
+              config={configInput(
+                "documents",
+                styles.fileInput,
+                "documents",
+                "file",
+                "",
+                "",
+                "*",
+                true,
+                false,
+                true
+              )}
+            />
+          </label>
+        </Fragment>
+      );
+    } else {
+      return (
+        <div
+          className={styles.previewItem}
+          key={`${index} ${docs}`}
+          onClick={() => onClickDownload()}
+        >
+          <img
+            className={styles.thumbnail}
+            src="https://i.pinimg.com/originals/aa/13/db/aa13dbd443f78ba5b2a08feedba95dfd.jpg"
+            alt="Document"
+          />
+          <div className={styles.fileNameContainer}>
+            <AiOutlineFile className={styles.previewIcon} />
+            <span className={styles.fileNameContent}>{doc.name}</span>
+          </div>
+          <AiFillCloseCircle
+            onClick={() => handleDeleteFile(index)}
+            className={styles.deleteIcon}
+          />
+        </div>
+      );
+    }
   };
 
-  // if (!idea) {
-  //   return (
-  //     <div>
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
-  const handleOnFileChange = (event) => {
-    // console.log(event.target.files);
-    for (let file of event.target.files) {
-      setPreview((preview) => [...preview, { file: file }]);
+  const handleOnFileChange = (target) => {
+    for (let file of target.files) {
+      setIdea((idea) => {
+        return { ...idea, documents: [...idea.documents, file] };
+      });
     }
   };
 
   const handleDeleteFile = (indexItem) => {
-    setPreview(
-      preview.filter((item, index) => {
-        return index !== indexItem;
-      })
-    );
+    setIdea((idea) => {
+      return {
+        ...idea,
+        documents: idea.documents.filter((item, index) => {
+          return index !== indexItem;
+        }),
+      };
+    });
   };
+
+  // const onClickDownload = () => {};
+
+  const handleOnChange = (target) => {
+    setIdea({ ...idea, [target.name]: target.value });
+    console.log(idea);
+  };
+
+  const handleOnChangeTextArea = ({ target }) => {
+    setIdea({ ...idea, [target.name]: target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    if (mode === "create") {
+      formData.append("title", idea.title);
+      formData.append("documents", idea.documents);
+      formData.append("description", idea.description);
+      formData.append("category_id", +idea.category_id);
+      axiosClient
+        .post(`http://103.107.182.190/service1/idea`, formData)
+        .then((response) => console.log(response.data))
+        .catch((err) => console.log(err));
+    }
+  };
+
+  if (!terms || !categories) {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.formContainer}>
@@ -83,51 +210,75 @@ function IdeaForm({ mode }) {
         {mode === "update" ? `Update Idea` : `Create Idea`}
       </h2>
       <form onSubmit={handleSubmit}>
+        {/* Title */}
         <div className={styles.formGroup}>
-          <label htmlFor="document" className={styles.label}>
-            Document
+          <label htmlFor="fullName" className={styles.label}>
+            Title
           </label>
-          {/* <Input
+          <Input
             onChange={handleOnChange}
             config={configInput(
-              "name",
+              "fullName",
               styles.formInput,
-              "document",
-              "file",
-              department.department_name,
-              "Your department name"
+              "title",
+              "text",
+              idea.title,
+              "Your Title",
+              undefined
             )}
-          /> */}
-          <input
-            type="file"
-            id="document"
-            name="document"
-            multiple
-            accept="*"
-            onChange={handleOnFileChange}
-          ></input>
+          />
         </div>
+        {/* Category */}
         <div className={styles.formGroup}>
-          <h2>Preview Files - Lenght: {preview.length}</h2>
+          <label htmlFor="category" className={styles.label}>
+            Category
+          </label>
+          <Select
+            name="category_id"
+            defaultValue={idea.category_id !== "" ? idea.category_id : ""}
+            id="category"
+            onChange={handleOnChange}
+          >
+            <option value="" disabled hidden>
+              Choose your category...
+            </option>
+            {categories.map((category, index) => (
+              <option
+                key={`${category.name} ${index}`}
+                value={category.category_id}
+              >
+                {category.category_name}
+              </option>
+            ))}
+          </Select>
+        </div>
+        {/* Description */}
+        <div className={styles.formGroup}>
+          <label htmlFor="description" className={styles.label}>
+            Description
+          </label>
+          <textarea
+            rows={4}
+            onChange={handleOnChangeTextArea}
+            name="description"
+            placeholder="Your description"
+            className={styles.description}
+            id="description"
+            value={idea.description}
+          ></textarea>
+        </div>
+        {/* Preview */}
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Documents</label>
           <div>
-            {preview.length > 0 ? (
-              preview.map((item, index) => (
-                <p key={index}>
-                  {item.file.name} -{" "}
-                  <span
-                    className={styles.deleteBtn}
-                    onClick={() => handleDeleteFile(index)}
-                  >
-                    (X)
-                  </span>
-                </p>
-              ))
-            ) : (
-              <p>Empty</p>
-            )}
+            <Preview
+              // onClickItem={onClickDownload}
+              data={idea.documents}
+              renderBody={renderPreview}
+              addMode={{ status: true, onFileChange: handleOnFileChange }}
+            />
           </div>
         </div>
-        <button onClick={() => console.log(preview)}>Log</button>
         <Button
           type={"submit"}
           buttonSize={"btnLarge"}

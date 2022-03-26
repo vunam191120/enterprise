@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Route, Routes, useParams, Outlet } from "react-router-dom";
 import { BsGrid3X3 } from "react-icons/bs";
 import { FaRegLightbulb, FaRegComments } from "react-icons/fa";
-import { AiOutlineFile } from "react-icons/ai";
+import { AiOutlineFile, AiFillFile } from "react-icons/ai";
 
 import axiosClient from "../../../apis/axios.config";
 import Spinner from "../../../component/spinner/Spinner";
@@ -11,11 +11,23 @@ import Preview from "../../../component/preview/Preview";
 import Comment from "../../../component/comment/Comment";
 import Others from "../../../component/others/Others";
 import Popup from "../../../component/popup/Popup";
+// import { IMG_EXTENSIONS } from "../../../constants/";
 
 const navs = [
   { name: "documents", icon: <BsGrid3X3 /> },
   { name: "comments", icon: <FaRegComments /> },
   { name: "others", icon: <FaRegLightbulb /> },
+];
+
+const IMG_EXTENSIONS = [
+  "jpg",
+  "jpeg",
+  "jfif",
+  "pjpeg",
+  "pjp",
+  "png",
+  "svg",
+  "gif",
 ];
 
 function IdeaDetail() {
@@ -47,8 +59,10 @@ function IdeaDetail() {
 
   const handleClickClose = () => setIsOpen(false);
 
-  const onClickDownload = () => {
-    console.log("Clicked Item");
+  const onClickDownload = (fileType, fileName) => {
+    IMG_EXTENSIONS.includes(fileType)
+      ? console.log("Thats Image")
+      : console.log("Thats File");
   };
 
   const onClickDelete = (deleteCommentId, deleteComentContent) => {
@@ -70,7 +84,7 @@ function IdeaDetail() {
       .catch((err) => console.log(err));
   };
 
-  const handleClickDeleteComment = (commentId, commentContent, ideaId) => {
+  const handleClickDeleteComment = (commentId, commentContent) => {
     axiosClient
       .delete(`http://103.107.182.190/service1/comment/${commentId}`, {
         comment: commentContent,
@@ -82,13 +96,21 @@ function IdeaDetail() {
       .catch((err) => console.log(err));
   };
 
-  const renderPreview = (doc, index, onClickDownload) => (
-    <div className={styles.item} key={index} onClick={() => onClickDownload()}>
-      <img
-        className={styles.thumbnail}
-        src="https://i.pinimg.com/originals/aa/13/db/aa13dbd443f78ba5b2a08feedba95dfd.jpg"
-        alt="Document"
-      />
+  const renderPreview = (doc, index, docs, onClickDownload) => (
+    <div
+      className={styles.item}
+      key={index}
+      onClick={() => onClickDownload(doc.file_type, doc.document)}
+    >
+      {IMG_EXTENSIONS.includes(doc.file_type) ? (
+        <img
+          className={styles.imgThumbnail}
+          src={`http://103.107.182.190/img/${doc.document}`}
+          alt="Document"
+        />
+      ) : (
+        <AiFillFile className={styles.iconThumbnail} />
+      )}
       <div className={styles.fileNameContainer}>
         <AiOutlineFile className={styles.icon} />
         <span className={styles.fileNameContent}>{doc.document}</span>
@@ -112,7 +134,7 @@ function IdeaDetail() {
         <div className={styles.header}>
           <div className={styles.imgContainer}>
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo8u47GCetG3Cu5fX5R4MBBPl3WK12OhWUlQ&usqp=CAU"
+              src={`http://103.107.182.190/${idea.avatar}`}
               alt="avtar idea"
             />
           </div>

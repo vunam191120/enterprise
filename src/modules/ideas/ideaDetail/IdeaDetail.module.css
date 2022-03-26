@@ -99,25 +99,32 @@
 /* RenderPreview */
 
 .item {
-  width: 260px;
-  height: 260px;
+  aspect-ratio: 1;
   border: 1px solid #dadce0;
   border-radius: var(--border--radius-1);
   position: relative;
   transition: 0.4s ease;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item:hover {
   transform: translateY(-5px);
 }
 
-.item img {
+.item .imgThumbnail {
   position: absolute;
   display: block;
   border-radius: var(--border--radius-1);
   width: 100%;
   height: 100%;
+}
+
+.item .iconThumbnail {
+  font-size: 40px;
+  color: #216fdb;
 }
 
 .icon {
@@ -135,6 +142,7 @@
   display: flex;
   align-items: center;
   padding: 8px 10px 8px 16px;
+  border-top: 1px solid #eee;
   width: 100%;
   border-bottom-left-radius: var(--border--radius-1);
   border-bottom-right-radius: var(--border--radius-1);
