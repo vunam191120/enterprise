@@ -1,6 +1,6 @@
 import axiosClient from "../../../apis/axios.config";
 import React, { useState, useEffect, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   AiOutlineFile,
   AiOutlineCloudUpload,
@@ -16,15 +16,10 @@ import Select from "../../../component/select/Select";
 import Preview from "../../../component/preview/Preview";
 
 function IdeaForm({ mode }) {
+  const navigate = useNavigate();
   const { ideaId } = useParams();
   const [idea, setIdea] = useState(null);
   const [categories, setCategories] = useState(null);
-  const [terms, setTerms] = useState(null);
-
-  async function getTerms() {
-    const res = await axiosClient.get(`http://103.107.182.190/service1/term`);
-    setTerms(res.data.data);
-  }
 
   async function getCategories() {
     const res = await axiosClient.get(
@@ -37,11 +32,11 @@ function IdeaForm({ mode }) {
     const res = await axiosClient.get(
       `http://103.107.182.190/service1/idea/${ideaId}`
     );
+    console.log("Idea:", res.data.data);
     setIdea(res.data.data);
   }
 
   useEffect(() => {
-    getTerms();
     getCategories();
     if (mode === "update") {
       getOneIdea();
@@ -174,7 +169,6 @@ function IdeaForm({ mode }) {
 
   const handleOnChange = (target) => {
     setIdea({ ...idea, [target.name]: target.value });
-    console.log(idea);
   };
 
   const handleOnChangeTextArea = ({ target }) => {
@@ -191,12 +185,13 @@ function IdeaForm({ mode }) {
       formData.append("category_id", +idea.category_id);
       axiosClient
         .post(`http://103.107.182.190/service1/idea`, formData)
-        .then((response) => console.log(response.data))
+        .then((res) => navigate("/ideas/view", { replace: true }))
         .catch((err) => console.log(err));
+    } else if (mode === "update") {
     }
   };
 
-  if (!terms || !categories) {
+  if (!categories) {
     return (
       <div>
         <Spinner />

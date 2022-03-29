@@ -1,11 +1,11 @@
-export const ROLES = {
+const ROLES = {
   QA_COORDINATOR: 3,
   ADMIN: 2,
   STAFF: 1,
   QA_MANAGER: 4,
 };
 
-export const IMG_EXTENSIONS = [
+const IMG_EXTENSIONS = [
   "jpg",
   "jpeg",
   "jfif",
@@ -15,3 +15,5 @@ export const IMG_EXTENSIONS = [
   "svg",
   "gif",
 ];
+
+export { ROLES, IMG_EXTENSIONS };

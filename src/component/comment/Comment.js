@@ -48,7 +48,7 @@ function Comment({ data, handleOnSubmit, onClickDeleteButton }) {
           <div className={styles.imgContainer}>
             <img
               className={styles.avtComment}
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo8u47GCetG3Cu5fX5R4MBBPl3WK12OhWUlQ&usqp=CAU"
+              src={`http://103.107.182.190/${currentUser.avatar}`}
               alt="Avatar User Comment"
             />
           </div>
@@ -113,7 +113,7 @@ function Comment({ data, handleOnSubmit, onClickDeleteButton }) {
         <div className={styles.imgContainer}>
           <img
             className={styles.avtComment}
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo8u47GCetG3Cu5fX5R4MBBPl3WK12OhWUlQ&usqp=CAU"
+            src={`http://103.107.182.190/${currentUser.avatar}`}
             alt="Avatar User Comment"
           />
         </div>
