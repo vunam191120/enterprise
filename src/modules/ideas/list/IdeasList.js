@@ -33,13 +33,20 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
     setIdeaId(deleteIdeaId);
   };
 
-  const handleClickDeleteCate = (deleteIdeaId) => {
+  const handleClickDeleteIdea = (deleteIdeaId) => {
     axiosClient
       .delete(`http://103.107.182.190/service1/idea/${deleteIdeaId}`)
       .then((response) => {
         console.log(response.data);
         getIdeas();
       })
+      .catch((err) => console.log(err));
+  };
+
+  const handleClickDownloadAll = () => {
+    axiosClient
+      .get("http://103.107.182.190/service1/csv/idea")
+      .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
 
@@ -90,9 +97,10 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
           type={"button"}
           buttonSize={"btnMedium"}
           buttonStyle={"btnPurpleSolid"}
+          onClick={handleClickDownloadAll}
         >
           <HiDownload className={styles.downloadIcon} />
-          Download All
+          Export All
         </Button>
       </div>
       <Table
@@ -109,7 +117,7 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
         title="Confirm Information"
         message="Are you sure to delete this record?"
         onClose={handleClickClose}
-        onConfirm={() => handleClickDeleteCate(ideaId)}
+        onConfirm={() => handleClickDeleteIdea(ideaId)}
       />
     </div>
   );

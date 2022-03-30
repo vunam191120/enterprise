@@ -1,10 +1,11 @@
 import axiosClient from "../../../apis/axios.config";
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   AiOutlineFile,
   AiOutlineCloudUpload,
   AiFillCloseCircle,
+  AiFillFile,
 } from "react-icons/ai";
 import clsx from "clsx";
 
@@ -19,7 +20,9 @@ function IdeaForm({ mode }) {
   const navigate = useNavigate();
   const { ideaId } = useParams();
   const [idea, setIdea] = useState(null);
-  const [categories, setCategories] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [newDocuments, setNewDocuments] = useState([]);
+  const [oldDocsLength, setOldDocsLength] = useState(0);
 
   async function getCategories() {
     const res = await axiosClient.get(
@@ -32,8 +35,8 @@ function IdeaForm({ mode }) {
     const res = await axiosClient.get(
       `http://103.107.182.190/service1/idea/${ideaId}`
     );
-    console.log("Idea:", res.data.data);
     setIdea(res.data.data);
+    setOldDocsLength(res.data.data.documents.length);
   }
 
   useEffect(() => {
@@ -41,7 +44,7 @@ function IdeaForm({ mode }) {
     if (mode === "update") {
       getOneIdea();
     } else if (mode === "create") {
-      setIdea({
+      return setIdea({
         title: "",
         documents: [],
         description: "",
@@ -82,18 +85,21 @@ function IdeaForm({ mode }) {
     if (index === docs.length - 1) {
       return (
         <Fragment key={`${index} ${docs}`}>
-          <div className={styles.previewItem} onClick={() => onClickDownload()}>
-            <img
-              className={styles.thumbnail}
-              src="https://i.pinimg.com/originals/aa/13/db/aa13dbd443f78ba5b2a08feedba95dfd.jpg"
-              alt="Document"
-            />
+          <div className={styles.previewItem}>
+            <AiFillFile className={styles.iconThumbnail} />
             <div className={styles.fileNameContainer}>
               <AiOutlineFile className={styles.previewIcon} />
-              <span className={styles.fileNameContent}>{doc.name}</span>
+              <span className={styles.fileNameContent}>
+                {mode === "update" ? doc.document : doc.name}
+              </span>
             </div>
             <AiFillCloseCircle
-              onClick={() => handleDeleteFile(index)}
+              onClick={() =>
+                handleDeleteFile(
+                  index,
+                  index <= oldDocsLength - 1 ? doc.document_id : undefined
+                )
+              }
               className={styles.deleteIcon}
             />
           </div>
@@ -123,22 +129,21 @@ function IdeaForm({ mode }) {
       );
     } else {
       return (
-        <div
-          className={styles.previewItem}
-          key={`${index} ${docs}`}
-          onClick={() => onClickDownload()}
-        >
-          <img
-            className={styles.thumbnail}
-            src="https://i.pinimg.com/originals/aa/13/db/aa13dbd443f78ba5b2a08feedba95dfd.jpg"
-            alt="Document"
-          />
+        <div className={styles.previewItem} key={`${index} ${docs}`}>
+          <AiFillFile className={styles.iconThumbnail} />
           <div className={styles.fileNameContainer}>
             <AiOutlineFile className={styles.previewIcon} />
-            <span className={styles.fileNameContent}>{doc.name}</span>
+            <span className={styles.fileNameContent}>
+              {mode === "update" ? doc.document : doc.name}
+            </span>
           </div>
           <AiFillCloseCircle
-            onClick={() => handleDeleteFile(index)}
+            onClick={() =>
+              handleDeleteFile(
+                index,
+                index <= oldDocsLength - 1 ? doc.document_id : undefined
+              )
+            }
             className={styles.deleteIcon}
           />
         </div>
@@ -151,10 +156,19 @@ function IdeaForm({ mode }) {
       setIdea((idea) => {
         return { ...idea, documents: [...idea.documents, file] };
       });
+      setNewDocuments((newDocuments) => [...newDocuments, file]);
     }
   };
 
-  const handleDeleteFile = (indexItem) => {
+  const handleDeleteFile = (indexItem, docId) => {
+    // Delete old document of idea
+    if (docId) {
+      axiosClient
+        .delete(`http://103.107.182.190/service1/documents/${docId}`)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+      setOldDocsLength((oldDocsLength) => oldDocsLength - 1);
+    }
     setIdea((idea) => {
       return {
         ...idea,
@@ -163,9 +177,10 @@ function IdeaForm({ mode }) {
         }),
       };
     });
+    return setNewDocuments(
+      newDocuments.filter((item, index) => index !== indexItem)
+    );
   };
-
-  // const onClickDownload = () => {};
 
   const handleOnChange = (target) => {
     setIdea({ ...idea, [target.name]: target.value });
@@ -178,20 +193,27 @@ function IdeaForm({ mode }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append("title", idea.title);
+    for (let doc of newDocuments) {
+      formData.append("documents", doc);
+    }
+    formData.append("description", idea.description);
+    formData.append("category_id", +idea.category_id);
     if (mode === "create") {
-      formData.append("title", idea.title);
-      formData.append("documents", idea.documents);
-      formData.append("description", idea.description);
-      formData.append("category_id", +idea.category_id);
       axiosClient
         .post(`http://103.107.182.190/service1/idea`, formData)
         .then((res) => navigate("/ideas/view", { replace: true }))
         .catch((err) => console.log(err));
-    } else if (mode === "update") {
+    } else {
+      formData.append("idea_id", idea.ideaId);
+      axiosClient
+        .put(`http://103.107.182.190/service1/idea`, formData)
+        .then((res) => navigate("/ideas/view", { replace: true }))
+        .catch((err) => console.log(err));
     }
   };
 
-  if (!categories) {
+  if (!idea) {
     return (
       <div>
         <Spinner />
@@ -201,6 +223,14 @@ function IdeaForm({ mode }) {
 
   return (
     <div className={styles.formContainer}>
+      <pre>
+        Idea.documents.length: {idea.documents.length}
+        <br></br>
+        newDocuments.length: {newDocuments.length}
+        <br></br>
+        oldDocsLength.length: {oldDocsLength}
+        <br></br>
+      </pre>
       <h2 className={styles.title}>
         {mode === "update" ? `Update Idea` : `Create Idea`}
       </h2>
@@ -267,7 +297,7 @@ function IdeaForm({ mode }) {
           <label className={styles.label}>Documents</label>
           <div>
             <Preview
-              // onClickItem={onClickDownload}
+              // onClickItem={undefined}
               data={idea.documents}
               renderBody={renderPreview}
               addMode={{ status: true, onFileChange: handleOnFileChange }}

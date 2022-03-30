@@ -2,7 +2,15 @@ import React from "react";
 
 import styles from "./Select.module.css";
 
-function Select({ onChange, id, name, className, defaultValue, children }) {
+function Select({
+  onChange,
+  id,
+  name,
+  className,
+  defaultValue,
+  children,
+  disabled,
+}) {
   const handleOnChange = (event) => {
     onChange(event.target);
   };
@@ -14,6 +22,7 @@ function Select({ onChange, id, name, className, defaultValue, children }) {
       id={id}
       onChange={handleOnChange}
       required
+      disabled={disabled}
     >
       {children}
     </select>

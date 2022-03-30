@@ -14,6 +14,9 @@ export default function Input({ config, onChange }) {
       let newData = target.value;
       return onChange(newData);
     }
+    if (config.type === "checkbox") {
+      return onChange(target);
+    }
     let newData = {
       name: target.name,
       value: target.value,

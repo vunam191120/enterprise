@@ -86,7 +86,6 @@ const previewFriend = [
 
 function UserProfile() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  const [statusSwitch, setStatusSwitch] = useState(false);
   const [user, setUser] = useState(currentUser);
   const [editMode, setEditMode] = useState(false);
   const [preview, setPreview] = useState("");
@@ -139,7 +138,7 @@ function UserProfile() {
   };
 
   const handleSwitch = (value) => {
-    setStatusSwitch(value);
+    setEditMode(value);
   };
 
   if (user === null) {
@@ -176,7 +175,7 @@ function UserProfile() {
                 <HiPencil className={styles.editIcon} />
                 Edit Profile
               </span>
-              <Switch onChange={handleSwitch} isChecked={statusSwitch} />
+              <Switch onChange={handleSwitch} isChecked={editMode} />
             </p>
           </div>
         </div>
@@ -277,7 +276,9 @@ function UserProfile() {
                     "full_name",
                     "text",
                     user.full_name,
-                    "Your Full Name"
+                    "Your Full Name",
+                    undefined,
+                    editMode
                   )}
                 />
               </div>
@@ -293,7 +294,9 @@ function UserProfile() {
                     "first_name",
                     "text",
                     user.first_name,
-                    "Your First Name"
+                    "Your First Name",
+                    undefined,
+                    editMode
                   )}
                 />
               </div>
@@ -309,7 +312,9 @@ function UserProfile() {
                     "last_name",
                     "text",
                     user.last_name,
-                    "Your First Name"
+                    "Your First Name",
+                    undefined,
+                    editMode
                   )}
                 />
               </div>
@@ -327,7 +332,7 @@ function UserProfile() {
                         "male",
                         undefined,
                         undefined,
-                        undefined,
+                        editMode,
                         undefined,
                         undefined,
                         user.gender === "male"
@@ -348,7 +353,7 @@ function UserProfile() {
                         "female",
                         undefined,
                         undefined,
-                        undefined,
+                        editMode,
                         undefined,
                         undefined,
                         user.gender === "female"
@@ -368,6 +373,7 @@ function UserProfile() {
                   name="role_id"
                   defaultValue={user.role_id === "" ? "" : user.role_id}
                   id="role"
+                  disabled={editMode}
                   onChange={handleOnChange}
                 >
                   <option value="" disabled hidden>
@@ -391,7 +397,9 @@ function UserProfile() {
                     "phone",
                     "text",
                     user.phone,
-                    "Your Phone"
+                    "Your Phone",
+                    undefined,
+                    editMode
                   )}
                 />
               </div>

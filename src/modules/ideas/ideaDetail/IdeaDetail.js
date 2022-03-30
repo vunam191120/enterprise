@@ -105,7 +105,7 @@ function IdeaDetail() {
       {IMG_EXTENSIONS.includes(doc.file_type) ? (
         <img
           className={styles.imgThumbnail}
-          src={`http://103.107.182.190/img/${doc.document}`}
+          src={`http://103.107.182.190/documents/${doc.document}`}
           alt="Document"
         />
       ) : (
