@@ -205,9 +205,9 @@ function IdeaForm({ mode }) {
         .then((res) => navigate("/ideas/view", { replace: true }))
         .catch((err) => console.log(err));
     } else {
-      formData.append("idea_id", idea.ideaId);
+      formData.append("idea_id", idea.idea_id);
       axiosClient
-        .put(`http://103.107.182.190/service1/idea`, formData)
+        .put(`http://103.107.182.190/service1/idea/${idea.idea_id}`, formData)
         .then((res) => navigate("/ideas/view", { replace: true }))
         .catch((err) => console.log(err));
     }
