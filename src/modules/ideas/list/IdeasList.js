@@ -44,9 +44,18 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
   };
 
   const handleClickDownloadAll = () => {
+    const filename = new Date() + '-idea.csv';
+
     axiosClient
-      .get("http://103.107.182.190/service1/csv")
-      .then((res) => console.log(res.data))
+      .get("http://103.107.182.190/service1/csv", { responseType: 'blob'})
+      .then((res) => {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      })
       .catch((err) => console.log(err));
   };
 
