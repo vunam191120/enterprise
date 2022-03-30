@@ -45,7 +45,7 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
 
   const handleClickDownloadAll = () => {
     axiosClient
-      .get("http://103.107.182.190/service1/idea/csv")
+      .get("http://103.107.182.190/service1/csv")
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
