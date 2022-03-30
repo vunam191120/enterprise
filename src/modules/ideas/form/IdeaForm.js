@@ -164,7 +164,7 @@ function IdeaForm({ mode }) {
     // Delete old document of idea
     if (docId) {
       axiosClient
-        .delete(`http://103.107.182.190/service1/documents/${docId}`)
+        .delete(`http://103.107.182.190/service1/document/${docId}`)
         .then((res) => console.log(res))
         .catch((err) => console.log(err));
       setOldDocsLength((oldDocsLength) => oldDocsLength - 1);
