@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../apis/axios.config";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -8,11 +8,14 @@ import styles from "./TermsList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import TermTableHead from "./table-head";
+import { ROLES } from "../../../constants";
 
 function TermsList({ currentPage, onCurrentPage, onPageSize }) {
   const [termId, setTermId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [terms, setTerms] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const navigate = useNavigate();
 
   async function getTerms() {
     let res = await axiosClient.get("http://103.107.182.190/service1/term");
@@ -20,6 +23,10 @@ function TermsList({ currentPage, onCurrentPage, onPageSize }) {
   }
 
   useEffect(() => {
+    if (currentUser.role_id === ROLES.QA_COORDINATOR) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
     getTerms();
   }, []);
 

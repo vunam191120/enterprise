@@ -278,7 +278,7 @@ function UserProfile() {
                     user.full_name,
                     "Your Full Name",
                     undefined,
-                    editMode
+                    !editMode
                   )}
                 />
               </div>
@@ -296,7 +296,7 @@ function UserProfile() {
                     user.first_name,
                     "Your First Name",
                     undefined,
-                    editMode
+                    !editMode
                   )}
                 />
               </div>
@@ -314,7 +314,7 @@ function UserProfile() {
                     user.last_name,
                     "Your First Name",
                     undefined,
-                    editMode
+                    !editMode
                   )}
                 />
               </div>
@@ -332,7 +332,7 @@ function UserProfile() {
                         "male",
                         undefined,
                         undefined,
-                        editMode,
+                        !editMode,
                         undefined,
                         undefined,
                         user.gender === "male"
@@ -353,7 +353,7 @@ function UserProfile() {
                         "female",
                         undefined,
                         undefined,
-                        editMode,
+                        !editMode,
                         undefined,
                         undefined,
                         user.gender === "female"
@@ -373,7 +373,7 @@ function UserProfile() {
                   name="role_id"
                   defaultValue={user.role_id === "" ? "" : user.role_id}
                   id="role"
-                  disabled={editMode}
+                  disabled={!editMode}
                   onChange={handleOnChange}
                 >
                   <option value="" disabled hidden>
@@ -399,7 +399,7 @@ function UserProfile() {
                     user.phone,
                     "Your Phone",
                     undefined,
-                    editMode
+                    !editMode
                   )}
                 />
               </div>

@@ -4,11 +4,13 @@ import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Layout from "./layout/Layout";
 import Login from "./pages/login/Login";
 import { isLogin } from "./helpers/isLogin";
+import ResetPassword from "./modules/user/resetPassword/ResetPassword";
 
 function App() {
   return (
     <GlobalStyle>
       <Routes>
+        <Route path="/resetPassword" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="*"

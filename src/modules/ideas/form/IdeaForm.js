@@ -7,6 +7,7 @@ import {
   AiFillCloseCircle,
   AiFillFile,
 } from "react-icons/ai";
+import { IoInformationCircleOutline } from "react-icons/io5";
 import clsx from "clsx";
 
 import styles from "./IdeaForm.module.css";
@@ -15,14 +16,23 @@ import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
 import Select from "../../../component/select/Select";
 import Preview from "../../../component/preview/Preview";
+import { ROLES } from "../../../constants";
+import Popup from "../../../component/popup/Popup";
 
 function IdeaForm({ mode }) {
   const navigate = useNavigate();
   const { ideaId } = useParams();
   const [idea, setIdea] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [agreements, setAggrements] = useState([]);
   const [newDocuments, setNewDocuments] = useState([]);
   const [oldDocsLength, setOldDocsLength] = useState(0);
+  const [agree, setAgree] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  // Body for agreement popups
+  let body;
 
   async function getCategories() {
     const res = await axiosClient.get(
@@ -39,8 +49,22 @@ function IdeaForm({ mode }) {
     setOldDocsLength(res.data.data.documents.length);
   }
 
+  async function getAggrements() {
+    const res = await axiosClient.get(
+      "http://103.107.182.190/service1/aggrement"
+    );
+    setAggrements(res.data.data);
+  }
+
   useEffect(() => {
+    // Check role
+    // if (currentUser.role_id === ROLES.QA_COORDINATOR) {
+    //   alert("You can not access this page");
+    //   navigate("/dashboard", { replace: true });
+    // }
+    getAggrements();
     getCategories();
+
     if (mode === "update") {
       getOneIdea();
     } else if (mode === "create") {
@@ -53,6 +77,26 @@ function IdeaForm({ mode }) {
     }
   }, []);
 
+  if (agreements.length > 0) {
+    body = (
+      <div className={styles.agreeContainer}>
+        {agreements.map((agree, index) => (
+          <div
+            className={styles.agreeItem}
+            key={`${agree.aggrement_name} ${index}`}
+          >
+            <h3>
+              {index + 1}. {agree.aggrement_name}
+            </h3>
+            <p>{agree.description}</p>
+          </div>
+        ))}
+      </div>
+    );
+  } else {
+    body = <p>No data</p>;
+  }
+
   const configInput = (
     id,
     className,
@@ -64,7 +108,8 @@ function IdeaForm({ mode }) {
     multiple,
     disabled,
     hidden,
-    required
+    required,
+    checked
   ) => {
     return {
       id: id,
@@ -78,6 +123,7 @@ function IdeaForm({ mode }) {
       multiple: multiple,
       hidden: hidden,
       required: required,
+      checked: checked,
     };
   };
 
@@ -190,8 +236,17 @@ function IdeaForm({ mode }) {
     setIdea({ ...idea, [target.name]: target.value });
   };
 
+  const handleOnChangeCheck = (target) => {
+    setAgree(!agree);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (agree === false) {
+      alert("You have to agree with Terms & Condition");
+      return navigate("/ideas/view", { replace: true });
+    }
+
     const formData = new FormData();
     formData.append("title", idea.title);
     for (let doc of newDocuments) {
@@ -213,6 +268,15 @@ function IdeaForm({ mode }) {
     }
   };
 
+  const handleClickClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleClickAgree = () => {
+    setIsOpen(false);
+    setAgree(true);
+  };
+
   if (!idea) {
     return (
       <div>
@@ -223,14 +287,6 @@ function IdeaForm({ mode }) {
 
   return (
     <div className={styles.formContainer}>
-      <pre>
-        Idea.documents.length: {idea.documents.length}
-        <br></br>
-        newDocuments.length: {newDocuments.length}
-        <br></br>
-        oldDocsLength.length: {oldDocsLength}
-        <br></br>
-      </pre>
       <h2 className={styles.title}>
         {mode === "update" ? `Update Idea` : `Create Idea`}
       </h2>
@@ -304,6 +360,32 @@ function IdeaForm({ mode }) {
             />
           </div>
         </div>
+        {/* Terms */}
+        <div className={clsx(styles.formGroup, styles.formCheck)}>
+          <label htmlFor="agree" className={styles.checkLabel}>
+            <Input
+              onChange={handleOnChangeCheck}
+              config={configInput(
+                "agree",
+                styles.checkInput,
+                "agreeTerms",
+                "checkbox",
+                "",
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                false,
+                agree
+              )}
+            />
+            <i className={styles.inputHelper}></i>I agree to all
+          </label>
+          <span className={styles.termsBtn} onClick={() => setIsOpen(true)}>
+            Terms & Conditions
+          </span>
+        </div>
         <Button
           type={"submit"}
           buttonSize={"btnLarge"}
@@ -311,6 +393,15 @@ function IdeaForm({ mode }) {
         >
           Confirm
         </Button>
+        <Popup
+          isOpen={isOpen}
+          icon={<IoInformationCircleOutline className={styles.popupIcon} />}
+          title="Terms & Conditions"
+          message={body}
+          onClose={handleClickClose}
+          buttonTitle="I agree"
+          onConfirm={handleClickAgree}
+        />
       </form>
     </div>
   );

@@ -8,11 +8,13 @@ import styles from "./DepartmentsList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import DepartmentTableHead from "./table-head";
+import { ROLES } from "../../../constants";
 
 function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
   const [departmentId, setDepartmentId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [departments, setDepartments] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
 
   async function getDepartments() {
@@ -23,6 +25,10 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
   }
 
   useEffect(() => {
+    if (currentUser.role_id === ROLES.QA_COORDINATOR) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
     getDepartments();
   }, []);
 

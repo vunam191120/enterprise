@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../apis/axios.config";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -8,11 +8,14 @@ import styles from "./UsersList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import UserTableHead from "./table-head";
+import { ROLES } from "../../../constants";
 
 function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   const [userId, setUserId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [users, setUsers] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const navigate = useNavigate();
 
   async function getUsers() {
     let res = await axiosClient.get("http://103.107.182.190/service1/user/");
@@ -20,6 +23,10 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   }
 
   useEffect(() => {
+    if (currentUser.role_id === ROLES.QA_COORDINATOR) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
     getUsers();
   }, []);
 

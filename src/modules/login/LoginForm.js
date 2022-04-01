@@ -127,7 +127,7 @@ export default function LoginForm() {
                     onChange={handleOnChange}
                     config={configInput(
                       "username",
-                      "",
+                      styles.formInput,
                       "username",
                       "text",
                       account.username,
@@ -143,7 +143,7 @@ export default function LoginForm() {
                     onChange={handleOnChange}
                     config={configInput(
                       "password",
-                      "",
+                      styles.formInput,
                       "password",
                       "password",
                       account.password,
@@ -197,9 +197,8 @@ export default function LoginForm() {
       </section>
       <Popup
         isOpen={isOpen}
-        title="Recover Password"
+        title="Terms & Conditions"
         message={body}
-        // body={body}
         onClose={handleClickClose}
         onConfirm={handleClickRecover}
       />

@@ -8,14 +8,20 @@ import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
 import Select from "../../../component/select/Select";
+import { ROLES } from "../../../constants";
 
 function TermForm({ mode }) {
   const navigate = useNavigate();
   const { termID } = useParams();
   const [term, setTerm] = useState(null);
-  //   const [managers, setManagers] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
+    // Check role base
+    if (currentUser.role_id !== ROLES.ADMIN) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
     if (mode === "update") {
       axiosClient
         .get(`http://103.107.182.190/service1/term/${termID}`)

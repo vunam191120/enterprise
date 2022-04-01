@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axiosClient from "../../../apis/axios.config";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
@@ -8,11 +8,14 @@ import styles from "./AggrementsList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import AggrementTableHead from "./table-head";
+import { ROLES } from "../../../constants";
 
 function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
   const [aggrementId, setCateID] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [aggrements, setAggrements] = useState([]);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const navigate = useNavigate();
 
   async function getAggrements() {
     let res = await axiosClient.get(
@@ -21,6 +24,10 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
     setAggrements(res.data.data);
   }
   useEffect(() => {
+    if (currentUser.role_id === ROLES.QA_COORDINATOR) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
     getAggrements();
   }, []);
 

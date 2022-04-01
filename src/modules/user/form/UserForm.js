@@ -1,6 +1,6 @@
 import axiosClient from "../../../apis/axios.config";
-import React, { useState, useMemo, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineUpload } from "react-icons/ai";
 
 import defaultAvt from "./../../../assets/user/avatar/defaultUserImage.png";
@@ -9,9 +9,11 @@ import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
 import Select from "../../../component/select/Select";
+import { ROLES } from "../../../constants";
 
 function UserForm({ mode }) {
   const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const { username } = useParams();
   const [departments, setDepartments] = useState([]);
   const [user, setUser] = useState(null);
@@ -19,6 +21,12 @@ function UserForm({ mode }) {
   const [oldImage, setOldImage] = useState(false);
 
   useEffect(() => {
+    // Check role base
+    if (currentUser.role_id !== ROLES.ADMIN) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
+
     // Call Department
     axiosClient
       .get("http://103.107.182.190/service1/department")
@@ -297,10 +305,10 @@ function UserForm({ mode }) {
             <option value="" disabled hidden>
               Choose your role...
             </option>
-            <option value="1">Quality Assurance Coordinator</option>
-            <option value="2">Quality Assurance Manager</option>
-            <option value="3">Staff</option>
-            <option value="4">Admin</option>
+            <option value="3">Quality Assurance Coordinator</option>
+            <option value="4">Quality Assurance Manager</option>
+            <option value="1">Staff</option>
+            <option value="2">Admin</option>
           </Select>
         </div>
         <div className={styles.formGroup}>

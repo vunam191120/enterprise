@@ -8,6 +8,7 @@ import {
   MdKeyboardArrowUp,
   MdFullscreen,
 } from "react-icons/md";
+import { ImStack } from "react-icons/im";
 import { BiEnvelope } from "react-icons/bi";
 import { AiOutlineBell } from "react-icons/ai";
 import { BsPower } from "react-icons/bs";
@@ -48,6 +49,10 @@ export default function Header() {
   return (
     <div className={styles.header}>
       <div className={styles.left}>
+        <div className={clsx(styles.logo)}>
+          <ImStack style={{ fontSize: "26px" }} />
+          <span className={clsx(styles.logoText)}>Purple</span>
+        </div>
         <GoThreeBars className={styles.iconLeft} />
         <FiSearch className={styles.iconLeft} />
         <Search

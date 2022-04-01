@@ -1,20 +1,27 @@
 import axiosClient from "../../../apis/axios.config";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./AggrementForm.module.css";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
 import Select from "../../../component/select/Select";
-// import Select from "../../../component/select/Select";
+import { ROLES } from "../../../constants";
 
 function AggrementForm({ mode }) {
   const navigate = useNavigate();
   const { aggrementId } = useParams();
   const [aggrement, setAggrement] = useState(null);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
+    // Check role base
+    if (currentUser.role_id !== ROLES.ADMIN) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
+
     if (mode === "update") {
       axiosClient
         .get(`http://103.107.182.190/service1/aggrement/${aggrementId}`)

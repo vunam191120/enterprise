@@ -3,6 +3,7 @@ import { NavLink, Route, Routes, useParams, Outlet } from "react-router-dom";
 import { BsGrid3X3 } from "react-icons/bs";
 import { FaRegLightbulb, FaRegComments } from "react-icons/fa";
 import { AiOutlineFile, AiFillFile } from "react-icons/ai";
+import { BiDislike, BiLike } from "react-icons/bi";
 
 import axiosClient from "../../../apis/axios.config";
 import Spinner from "../../../component/spinner/Spinner";
@@ -148,6 +149,22 @@ function IdeaDetail() {
         </div>
         <div className={styles.body}>
           <p className={styles.description}>Description: {idea.description}</p>
+          <div className={styles.actionContainer}>
+            <div className={styles.actionItem}>
+              <div className={styles.actionBtn}>
+                <BiLike className={styles.actionIcon} />
+                <span>Like</span>
+              </div>
+              <span>1234</span>
+            </div>
+            <div className={styles.actionItem}>
+              <div className={styles.actionBtn}>
+                <BiDislike className={styles.actionIcon} />
+                <span>Dislike</span>
+              </div>
+              <span>20</span>
+            </div>
+          </div>
           <div className={styles.nav}>
             {navs.map((nav, index) => (
               <NavLink

@@ -168,3 +168,114 @@
   height: 0;
   visibility: hidden;
 }
+
+/* Checkbox */
+.formCheck {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.checkLabel {
+  display: block;
+  margin-left: 1.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.checkInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 0;
+  margin-top: 0;
+  z-index: 1;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.inputHelper::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  border: 2px solid #b66dff;
+  transition: 250ms ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.inputHelper::after {
+  content: "\2713";
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  transition: all;
+  opacity: 0;
+  transform: scale(0);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.checkInput:checked + .inputHelper::before {
+  /* background: linear-gradient(to right, #da8cff, #9a55ff); */
+  background-color: #b66dff;
+}
+
+.checkInput:checked + .inputHelper::after {
+  width: 18px;
+  padding: 2px;
+  opacity: 1;
+  line-height: 18px;
+  transform: scale(1);
+}
+
+.termsBtn {
+  color: #216fdb;
+  text-decoration: none;
+  transition: 0.4s ease;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-left: 4px;
+}
+
+.termsBtn:hover {
+  text-decoration: underline;
+  color: #b66dff;
+}
+
+.popupIcon {
+  color: #9c9fa6;
+  font-size: 80px;
+}
+
+/* Body Agreement */
+.agreeContainer {
+  width: 100%;
+  height: 140px;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background-color: #eee;
+}
+
+.agreeItem {
+  text-align-last: left;
+  margin-bottom: 10px;
+}
+
+.agreeItem > h3 {
+  color: #636161;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.agreeItem > p {
+  color: rgba(0, 0, 0, 0.72);
+  text-align: justify;
+  width: 100%;
+  word-break: break-all;
+}

@@ -1,24 +1,32 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styles from "./Sidebar.module.css";
 import clsx from "clsx";
-import { ImStack } from "react-icons/im";
 import { BsFillBookmarkCheckFill } from "react-icons/bs";
 
-import sidebarAdmin from "./sidebarData";
-import avatar from "./../../assets/user/avatar/avt1.jpg";
+import {
+  SidebarStaff,
+  SidebarAdmin,
+  SidebarQAC,
+  SidebarQAM,
+} from "./sidebarData";
 import SidebarItem from "./sidebarItem/SidebarItem";
 import checkRole from "../../helpers/checkRole";
 
 export default function Sidebar(props) {
-  const sidebarList = props.type === "Admin" ? sidebarAdmin : null;
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  let sidebarList;
+  if (props.type === "Admin") {
+    sidebarList = SidebarAdmin;
+  } else if (props.type === "Staff") {
+    sidebarList = SidebarStaff;
+  } else if (props.type === "QA Coordinator") {
+    sidebarList = SidebarQAC;
+  } else {
+    sidebarList = SidebarQAM;
+  }
 
   return (
-    <>
-      <div className={clsx(styles.logo)}>
-        <ImStack style={{ fontSize: "26px" }} />
-        <span className={clsx(styles.logoText)}>Purple</span>
-      </div>
+    <Fragment>
       <div className={clsx(styles.avtarContainer)}>
         <img
           className={clsx(styles.avataImg)}
@@ -38,6 +46,6 @@ export default function Sidebar(props) {
           <SidebarItem key={index} item={sidebar} />
         ))}
       </nav>
-    </>
+    </Fragment>
   );
 }

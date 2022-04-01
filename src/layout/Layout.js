@@ -27,6 +27,7 @@ import CreateIdea from "../pages/idea/create/CreateIdea";
 import Aggrement from "../pages/aggrement/Aggrement";
 import CreateAggrement from "../pages/aggrement/create/CreateAggrement";
 import UpdateAggrement from "../pages/aggrement/update/UpdateAggrement";
+import checkRole from "../helpers/checkRole";
 
 export default function Layout() {
   // const renderRoutes = (routes) => {
@@ -40,16 +41,18 @@ export default function Layout() {
   const showSidebar = () => {
     setSidebar(!sidebar);
   };
-  // styles={{left : sidebar ? "30px" : "260px"}}
+
+  const currentRole = checkRole(
+    JSON.parse(localStorage.getItem("currentUser")).role_id
+  );
 
   return (
     <div className={styles.app}>
+      <Header onClick={showSidebar} />
       <div className={styles.sidebar}>
-        <Sidebar type="Admin" />
+        <Sidebar type={currentRole} />
       </div>
       <div className={styles.contentContainer}>
-        <Header onClick={showSidebar} />
-        {/* Content showed below */}
         <div className={styles.content}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />

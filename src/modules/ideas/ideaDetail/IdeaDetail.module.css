@@ -96,6 +96,56 @@
   margin-left: 6px;
 }
 
+.actionContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 44px;
+}
+
+.actionItem {
+  background-color: #fafafa;
+  color: #555;
+  border: 1px solid #c6c6c6;
+  border-radius: 2px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 4px 0 4px 10px;
+}
+
+.actionIcon {
+  font-size: 1.25rem;
+  margin-right: 4px;
+}
+
+.actionIcon + span {
+  padding: 0 6px 0 1px;
+  font-weight: 500;
+  color: #555555;
+  border-right: 1px solid #c6c6c6;
+  transition: 0.4s ease;
+}
+
+.actionBtn {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: 0.4s ease;
+}
+
+.actionBtn:hover .actionIcon,
+.actionBtn:hover .actionIcon + span {
+  color: #000;
+}
+
+.actionBtn + span {
+  color: #000;
+  font-size: 1rem;
+  padding: 0 7px 0 6px;
+}
+
 /* RenderPreview */
 
 .item {

@@ -1,30 +1,37 @@
 import axiosClient from "../../../apis/axios.config";
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import styles from "./CategoryForm.module.css";
 import Input from "../../../component/input/Input";
 import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
-// import Select from "../../../component/select/Select";
+import { ROLES } from "../../../constants";
 
 function CategoryForm({ mode }) {
   const navigate = useNavigate();
   const { cateId } = useParams();
+  const [department, setDepartment] = useState([]);
   const [category, setCategory] = useState(null);
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   useEffect(() => {
+    if (currentUser.role_id === ROLES.STAFF) {
+      alert("You cannot access this page");
+      navigate("/dashboard", { replace: true });
+    }
+    axiosClient
+      .get(`http://103.107.182.190/service1/department/`)
+      .then((res) => setDepartment(res.data.data));
     if (mode === "update") {
       axiosClient
         .get(`http://103.107.182.190/service1/category/${cateId}`)
-        .then((response) => setCategory({ ...response.data.data }))
+        .then((res) => setCategory(res.data.data))
         .catch((err) => console.log(err));
     } else if (mode === "create") {
       setCategory({
         category_name: "",
         description: "",
-        staff_id: 5,
-        department_id: 1,
       });
     }
   }, []);
@@ -75,8 +82,6 @@ function CategoryForm({ mode }) {
       .post(`http://103.107.182.190/service1/category`, {
         category_name: category.category_name,
         description: category.description,
-        staff_id: category.staff_id,
-        department_id: category.department_id,
       })
       .then((response) => {
         console.log(response.data);
@@ -128,42 +133,31 @@ function CategoryForm({ mode }) {
             value={category.description}
           ></textarea>
         </div>
-        <div className={styles.formGroup}>
+        {/* <div className={styles.formGroup}>
           <label htmlFor="department" className={styles.label}>
             Department
           </label>
-          <Input
+          <Select
+            name="department_id"
             onChange={handleOnChange}
-            config={configInput(
-              "department",
-              styles.formInput,
-              "department_id",
-              "number",
-              category.department_id,
-              "Department ID",
-              "",
-              true
-            )}
-          />
-        </div>
-        <div className={styles.formGroup}>
-          <label htmlFor="staff" className={styles.label}>
-            Staff ID
-          </label>
-          <Input
-            onChange={handleOnChange}
-            config={configInput(
-              "staff",
-              styles.formInput,
-              "staff_id",
-              "number",
-              category.staff_id,
-              "Staff ID",
-              "",
-              true
-            )}
-          />
-        </div>
+            id="department"
+            defaultValue={
+              category.department_id !== "" ? category.department_id : ""
+            }
+          >
+            <option hidden disabled value="">
+              Choose Your Department ID ...
+            </option>
+            {department.map((item, index) => (
+              <option
+                key={`${item.department_name} ${index}`}
+                value={item.department_id}
+              >
+                {item.department_name}
+              </option>
+            ))}
+          </Select>
+        </div> */}
         <Button
           type={"submit"}
           buttonSize={"btnLarge"}

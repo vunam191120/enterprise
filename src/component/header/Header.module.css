@@ -1,16 +1,31 @@
 .header {
   display: flex;
-  padding: 0 24px;
+  padding-right: 24px;
   align-items: center;
   justify-content: space-between;
   position: fixed;
-  left: 260px;
+  left: 0;
   top: 0;
   right: 0;
   height: 70px;
   color: #000;
   background: #fff;
   z-index: 20;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 260px;
+  color: #b66dff;
+}
+
+.logoText {
+  margin-left: 10px;
+  font-size: 28px;
+  font-weight: 600;
 }
 
 .left,
