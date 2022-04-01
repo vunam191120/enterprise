@@ -10,7 +10,7 @@ function App() {
   return (
     <GlobalStyle>
       <Routes>
-        <Route path="/resetPassword" element={<ResetPassword />} />
+        <Route path="/resetPassword/:token" element={<ResetPassword />} />
         <Route path="/login" element={<Login />} />
         <Route
           path="*"

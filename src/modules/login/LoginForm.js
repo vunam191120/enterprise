@@ -64,7 +64,7 @@ export default function LoginForm() {
           "recoverUn",
           "",
           "recover_username",
-          "text",
+          "email",
           recoverUsername,
           "Type your username"
         )}
@@ -98,7 +98,15 @@ export default function LoginForm() {
   };
 
   const handleClickRecover = () => {
-    console.log("Sended, ", recoverUsername);
+    axiosClient
+      .post(`http://103.107.182.190/service1/forgot-password`, {
+        username: recoverUsername,
+      })
+      .then((res) => {
+        console.log("Sended Email");
+        setIsOpen(false);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleCheckbox = () => {

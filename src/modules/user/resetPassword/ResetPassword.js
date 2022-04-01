@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ImStack } from "react-icons/im";
+import { useParams } from "react-router-dom";
+import axiosClient from "../../../apis/axios.config";
 import Button from "../../../component/button/Button";
 import Input from "../../../component/input/Input";
 import Spinner from "../../../component/spinner/Spinner";
@@ -7,14 +9,21 @@ import Spinner from "../../../component/spinner/Spinner";
 import styles from "./ResetPassword.module.css";
 
 function ResetPassword() {
-  const [user, setUser] = useState({ password: "", confirmPassword: "" });
+  const [user, setUser] = useState({ new_password: "", confirmPassword: "" });
+  let { token } = useParams();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (user.password !== user.confirmPassword) {
-      console.log("Doesnt match");
+      return alert("Doesnt match");
     }
-    console.log(user.password, user.confirmPassword);
+    axiosClient
+      .post(`http://103.107.182.190/service1/reset-password/${token}`, {
+        new_password: user.new_password,
+        confirm_password: user.confirmPassword,
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const handleOnChange = (newData) => {
@@ -55,10 +64,10 @@ function ResetPassword() {
             <Input
               onChange={handleOnChange}
               config={configInput(
-                "password",
+                "new_password",
                 styles.formInput,
                 "password",
-                user.password,
+                user.new_password,
                 "Type your password"
               )}
             />

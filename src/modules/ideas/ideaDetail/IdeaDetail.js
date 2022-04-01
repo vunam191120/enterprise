@@ -155,14 +155,14 @@ function IdeaDetail() {
                 <BiLike className={styles.actionIcon} />
                 <span>Like</span>
               </div>
-              <span>1234</span>
+              <span>{idea.count.length >= 1 ? idea.count[0].count : "0"}</span>
             </div>
             <div className={styles.actionItem}>
               <div className={styles.actionBtn}>
                 <BiDislike className={styles.actionIcon} />
                 <span>Dislike</span>
               </div>
-              <span>20</span>
+              <span>{idea.count.length >= 2 ? idea.count[1].count : "0"}</span>
             </div>
           </div>
           <div className={styles.nav}>

@@ -145,6 +145,16 @@ const SidebarQAM = [
     icon: <BiCategoryAlt />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "View",
+        path: "/categories/view",
+      },
+      {
+        title: "Create",
+        path: "/categories/create",
+      },
+    ],
   },
   {
     title: "User",
