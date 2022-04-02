@@ -49,7 +49,7 @@ const SidebarAdmin = [
   },
   {
     title: "Category",
-    path: "/category",
+    path: "/categories",
     icon: <BiCategoryAlt />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
@@ -141,7 +141,7 @@ const SidebarQAM = [
   },
   {
     title: "Category",
-    path: "/category/view",
+    path: "/categories/view",
     icon: <BiCategoryAlt />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
@@ -227,7 +227,7 @@ const SidebarStaff = [
   },
   {
     title: "Category",
-    path: "/category/view",
+    path: "/categories/view",
     icon: <BiCategoryAlt />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,

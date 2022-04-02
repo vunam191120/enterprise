@@ -243,8 +243,7 @@ function IdeaForm({ mode }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (agree === false) {
-      alert("You have to agree with Terms & Condition");
-      return navigate("/ideas/view", { replace: true });
+      return alert("You have to agree with Terms & Condition");
     }
 
     const formData = new FormData();

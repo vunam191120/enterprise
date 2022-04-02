@@ -2,8 +2,14 @@ import React, { useEffect, useState } from "react";
 import { NavLink, Route, Routes, useParams, Outlet } from "react-router-dom";
 import { BsGrid3X3 } from "react-icons/bs";
 import { FaRegLightbulb, FaRegComments } from "react-icons/fa";
-import { AiOutlineFile, AiFillFile } from "react-icons/ai";
+import {
+  AiOutlineFile,
+  AiFillFile,
+  AiTwotoneLike,
+  AiTwotoneDislike,
+} from "react-icons/ai";
 import { BiDislike, BiLike } from "react-icons/bi";
+import { HiDownload } from "react-icons/hi";
 
 import axiosClient from "../../../apis/axios.config";
 import Spinner from "../../../component/spinner/Spinner";
@@ -12,6 +18,7 @@ import Preview from "../../../component/preview/Preview";
 import Comment from "../../../component/comment/Comment";
 import Others from "../../../component/others/Others";
 import Popup from "../../../component/popup/Popup";
+import Button from "../../../component/button/Button";
 // import { IMG_EXTENSIONS } from "../../../constants/";
 
 const navs = [
@@ -38,12 +45,20 @@ function IdeaDetail() {
   const [idea, setIdea] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [comments, setComments] = useState([]);
+  const [onFocusLike, setOnFocusLike] = useState(false);
+  const [onFocusDisLike, setOnFocusDisLike] = useState(false);
+  const [countLike, setCountLike] = useState();
+  const [countDisLike, setCountDisLike] = useState();
 
-  async function getIdea() {
-    let res = await axiosClient.get(
-      `http://103.107.182.190/service1/idea/${ideaId}`
-    );
-    setIdea(res.data.data);
+  function checkCount(idea) {
+    // Check count like
+    idea.count.length === 1
+      ? setCountLike(idea.count[0].count)
+      : setCountLike(0);
+    // Check count dislike
+    idea.count.length === 2
+      ? setCountDisLike(idea.count[1].count)
+      : setCountDisLike(0);
   }
 
   async function getIdeaComment() {
@@ -54,6 +69,14 @@ function IdeaDetail() {
   }
 
   useEffect(() => {
+    async function getIdea() {
+      let res = await axiosClient.get(
+        `http://103.107.182.190/service1/idea/${ideaId}`
+      );
+      setIdea(res.data.data);
+      checkCount(res.data.data);
+    }
+
     getIdea();
     getIdeaComment();
   }, []);
@@ -101,7 +124,7 @@ function IdeaDetail() {
     <div
       className={styles.item}
       key={index}
-      onClick={() => onClickDownload(doc.file_type, doc.document)}
+      // onClick={() => onClickDownload(doc.file_type, doc.document)}
     >
       {IMG_EXTENSIONS.includes(doc.file_type) ? (
         <img
@@ -118,6 +141,48 @@ function IdeaDetail() {
       </div>
     </div>
   );
+
+  async function vote(action) {
+    const res = await axiosClient.post("http://103.107.182.190/service1/vote", {
+      idea_id: idea.idea_id,
+      vote: action,
+    });
+    console.log(res.data);
+  }
+
+  const handleClickLike = () => {
+    if (onFocusLike) {
+      setOnFocusLike(false);
+      setCountLike(countLike - 1);
+    } else {
+      setOnFocusLike(true);
+      vote(1);
+      setCountLike(countLike + 1);
+      if (onFocusDisLike) {
+        setOnFocusDisLike(false);
+        setCountLike(countLike + 1);
+        setCountDisLike(countDisLike - 1);
+      }
+    }
+  };
+
+  const handleClickDisLike = () => {
+    if (onFocusDisLike) {
+      setOnFocusDisLike(false);
+      setCountDisLike(countDisLike - 1);
+    } else {
+      setOnFocusDisLike(true);
+      vote(0);
+      setCountDisLike(countDisLike + 1);
+      if (onFocusLike) {
+        setOnFocusLike(false);
+        setCountDisLike(countDisLike + 1);
+        setCountLike(countLike - 1);
+      }
+    }
+  };
+
+  const handleClickDownloadAll = () => {};
 
   if (idea === null) {
     return (
@@ -149,21 +214,41 @@ function IdeaDetail() {
         </div>
         <div className={styles.body}>
           <p className={styles.description}>Description: {idea.description}</p>
-          <div className={styles.actionContainer}>
-            <div className={styles.actionItem}>
-              <div className={styles.actionBtn}>
-                <BiLike className={styles.actionIcon} />
-                <span>Like</span>
+          <div className={styles.flex}>
+            <div className={styles.actionContainer}>
+              <div className={styles.actionItem}>
+                <div className={styles.actionBtn} onClick={handleClickLike}>
+                  {onFocusLike ? (
+                    <AiTwotoneLike className={styles.actionIcon} />
+                  ) : (
+                    <BiLike className={styles.actionIcon} />
+                  )}
+                  <span>Like</span>
+                </div>
+                <span>{countLike}</span>
               </div>
-              <span>{idea.count.length >= 1 ? idea.count[0].count : "0"}</span>
-            </div>
-            <div className={styles.actionItem}>
-              <div className={styles.actionBtn}>
-                <BiDislike className={styles.actionIcon} />
-                <span>Dislike</span>
+              <div className={styles.actionItem}>
+                <div className={styles.actionBtn} onClick={handleClickDisLike}>
+                  {onFocusDisLike ? (
+                    <AiTwotoneDislike className={styles.actionIcon} />
+                  ) : (
+                    <BiDislike className={styles.actionIcon} />
+                  )}
+                  <span>Dislike</span>
+                </div>
+                <span>{countDisLike}</span>
               </div>
-              <span>{idea.count.length >= 2 ? idea.count[1].count : "0"}</span>
             </div>
+            <Button
+              className={styles.downloadBtn}
+              type={"button"}
+              buttonSize={"btnMedium"}
+              buttonStyle={"btnPurpleSolid"}
+              onClick={handleClickDownloadAll}
+            >
+              <HiDownload className={styles.downloadIcon} />
+              Export All
+            </Button>
           </div>
           <div className={styles.nav}>
             {navs.map((nav, index) => (

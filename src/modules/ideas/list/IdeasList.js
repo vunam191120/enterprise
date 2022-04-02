@@ -44,15 +44,15 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
   };
 
   const handleClickDownloadAll = () => {
-    const filename = new Date() + '-idea.csv';
+    const filename = new Date() + "-idea.csv";
 
     axiosClient
-      .get("http://103.107.182.190/service1/csv", { responseType: 'blob'})
+      .get("http://103.107.182.190/service1/csv", { responseType: "blob" })
       .then((res) => {
         const url = window.URL.createObjectURL(new Blob([res.data]));
-        const link = document.createElement('a');
+        const link = document.createElement("a");
         link.href = url;
-        link.setAttribute('download', filename); //or any other extension
+        link.setAttribute("download", filename); //or any other extension
         document.body.appendChild(link);
         link.click();
       })
@@ -72,7 +72,10 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
       <td>{idea.term_name}</td>
       <td>{idea.status}</td>
       <td>
-        <Link className={styles.iconAction} to={`/ideas/${idea.idea_id}`}>
+        <Link
+          className={styles.iconAction}
+          to={`/ideas/${idea.idea_id}/documents`}
+        >
           <ImEye />
         </Link>
         <Link

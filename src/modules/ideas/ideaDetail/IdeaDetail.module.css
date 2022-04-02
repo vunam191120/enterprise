@@ -96,11 +96,17 @@
   margin-left: 6px;
 }
 
+.flex {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding: 0 44px;
+}
+
 .actionContainer {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 44px;
 }
 
 .actionItem {
@@ -111,7 +117,6 @@
   margin-right: 10px;
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
   padding: 4px 0 4px 10px;
 }
 
@@ -206,4 +211,15 @@
   font-weight: 500;
   color: rgba(0, 0, 0, 0.72);
   font-size: 0.875rem;
+}
+
+.downloadBtn {
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.downloadBtn > .downloadIcon {
+  margin-right: 4px;
 }
