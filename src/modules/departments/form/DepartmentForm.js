@@ -26,7 +26,7 @@ function DepartmentForm({ mode }) {
     // Get manager
     axiosClient.get(`http://103.107.182.190/service1/user`).then((response) => {
       const filterManger = response.data.data.rows.filter((manager) => {
-        return manager.role_id === 4;
+        return manager.role_id === 3;
       });
       console.log(filterManger);
       setManagers(filterManger);
