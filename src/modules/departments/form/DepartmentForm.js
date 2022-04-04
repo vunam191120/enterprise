@@ -25,9 +25,10 @@ function DepartmentForm({ mode }) {
 
     // Get manager
     axiosClient.get(`http://103.107.182.190/service1/user`).then((response) => {
-      const filterManger = response.data.data.filter((manager) => {
+      const filterManger = response.data.data.rows.filter((manager) => {
         return manager.role_id === 4;
       });
+      console.log(filterManger);
       setManagers(filterManger);
     });
     if (mode === "update") {
@@ -150,7 +151,7 @@ function DepartmentForm({ mode }) {
         </div>
         <div className={styles.formGroup}>
           <label htmlFor="manager" className={styles.label}>
-            Manager ID
+            Manager Name
           </label>
           <Select
             name="manager_id"
@@ -161,14 +162,14 @@ function DepartmentForm({ mode }) {
             }
           >
             <option hidden disabled value="">
-              Choose Your Manager ID ...
+              Choose Your Manager Name ...
             </option>
             {managers.map((manager, index) => (
               <option
                 key={`${manager.username} ${index}`}
                 value={manager.role_id}
               >
-                {manager.username}
+                {manager.full_name}
               </option>
             ))}
           </Select>
