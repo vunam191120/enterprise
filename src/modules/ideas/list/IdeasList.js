@@ -11,11 +11,29 @@ import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import IdeaTableHead from "./table-head";
 import Button from "../../../component/button/Button";
+import Pagination from "../../../component/pagination/Pagination";
+import Input from "../../../component/input/Input";
+import Select from "../../../component/select/Select";
 
-function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
+function IdeasList() {
   const [ideaId, setIdeaId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [ideas, setIdeas] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalRows: 1,
+  });
+  const [seperatePage, setSeperatePage] = useState([]);
+
+  const [filter, setFilter] = useState({
+    key: "",
+    value: "",
+  });
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
+  };
 
   async function getIdeas() {
     let res = await axiosClient.get("http://103.107.182.190/service1/idea");
@@ -25,6 +43,21 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
   useEffect(() => {
     getIdeas();
   }, []);
+
+  useEffect(() => {
+    setPagination((pagination) => ({ ...pagination, totalRows: ideas.length }));
+  }, [ideas.length]);
+
+  useEffect(() => {
+    setSeperatePage(
+      ideas.slice(
+        (pagination.page - 1) * pagination.limit,
+        pagination.page * pagination.limit > ideas.length
+          ? undefined
+          : pagination.page * pagination.limit
+      )
+    );
+  }, [ideas, pagination.limit, pagination.page]);
 
   const handleClickClose = () => setIsOpen(false);
 
@@ -92,6 +125,27 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
     </tr>
   );
 
+  const handleOnFilter = (target) => {
+    setFilter({ ...filter, value: target.value });
+  };
+
+  const handleOnSelectChange = (target) => {
+    setFilter({ ...filter, key: target.value });
+  };
+
+  const handleOnSubmitFilter = (e) => {
+    e.preventDefault();
+    // axiosClient
+    //   .get(`http://103.107.182.190/service1/idea?${filter.key}=${filter.value}`)
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => console.log(err));
+    console.log(
+      `http://103.107.182.190/service1/idea?${filter.key}=${filter.value}`
+    );
+  };
+
   if (ideas.length === 0) {
     return (
       <div>
@@ -104,6 +158,28 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
     <div className={styles.container}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>Idea List</h2>
+        <form onSubmit={handleOnSubmitFilter} className={styles.filter}>
+          <Input
+            onChange={handleOnFilter}
+            config={{
+              name: "filter",
+              type: "number",
+              placeholder: "Select one filed and search",
+              className: styles.filterInput,
+            }}
+          />
+          <Select
+            name="field"
+            defaultValue={""}
+            onChange={handleOnSelectChange}
+          >
+            <option value="" disabled hidden>
+              Choose your filter...
+            </option>
+            <option value="department">Department ID</option>
+            <option value="category">Category ID</option>
+          </Select>
+        </form>
         <Button
           className={styles.downloadBtn}
           type={"button"}
@@ -120,10 +196,9 @@ function IdeasList({ currentPage, onCurrentPage, onPageSize }) {
         head={<IdeaTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={ideas}
-        // title={"Idea List"}
+        data={seperatePage}
       />
-
+      <Pagination pagination={pagination} onPageChage={handlePageChange} />
       <Popup
         isOpen={isOpen}
         title="Confirm Information"

@@ -8,17 +8,28 @@ import styles from "./CategoriesList.module.css";
 import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import CategoryTableHead from "./table-head";
+import Pagination from "../../../component/pagination/Pagination";
 
 function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
   const [cateId, setCateID] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalRows: 1,
+  });
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
+  };
 
   useEffect(() => {
-    axiosClient
-      .get("http://103.107.182.190/service1/category")
-      .then((response) => setCategories(response.data.data));
+    axiosClient.get("http://103.107.182.190/service1/category").then((res) => {
+      setCategories(res.data.data);
+      setPagination({ ...pagination, totalRows: res.data.data.length });
+    });
   }, []);
 
   const handleClickClose = () => setIsOpen(false);
@@ -77,10 +88,15 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
         head={<CategoryTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={categories}
+        data={categories.slice(
+          (pagination.page - 1) * pagination.limit,
+          pagination.page * pagination.limit > categories.length
+            ? undefined
+            : pagination.page * pagination.limit
+        )}
         title={"Category List"}
       />
-
+      <Pagination pagination={pagination} onPageChage={handlePageChange} />
       <Popup
         isOpen={isOpen}
         title="Confirm Information"

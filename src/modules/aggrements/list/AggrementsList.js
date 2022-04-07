@@ -9,6 +9,7 @@ import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import AggrementTableHead from "./table-head";
 import { ROLES } from "../../../constants";
+import Pagination from "../../../component/pagination/Pagination";
 
 function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
   const [aggrementId, setCateID] = useState("");
@@ -16,12 +17,22 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
   const [aggrements, setAggrements] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalRows: 1,
+  });
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
+  };
 
   async function getAggrements() {
     let res = await axiosClient.get(
       "http://103.107.182.190/service1/aggrement"
     );
     setAggrements(res.data.data);
+    setPagination({ ...pagination, totalRows: res.data.data.length });
   }
   useEffect(() => {
     if (currentUser.role_id === ROLES.QA_COORDINATOR) {
@@ -92,10 +103,15 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
         head={<AggrementTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={aggrements}
+        data={aggrements.slice(
+          (pagination.page - 1) * pagination.limit,
+          pagination.page * pagination.limit > aggrements.length
+            ? undefined
+            : pagination.page * pagination.limit
+        )}
         title={"Aggrement List"}
       />
-
+      <Pagination pagination={pagination} onPageChage={handlePageChange} />
       <Popup
         isOpen={isOpen}
         title="Confirm Information"

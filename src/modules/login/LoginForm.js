@@ -103,7 +103,8 @@ export default function LoginForm() {
         username: recoverUsername,
       })
       .then((res) => {
-        console.log("Sended Email");
+        alert("Sended Email");
+        console.log(res.data.data);
         setIsOpen(false);
       })
       .catch((err) => console.log(err));

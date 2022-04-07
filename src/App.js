@@ -1,6 +1,6 @@
 import "./App.css";
 import GlobalStyle from "./component/globalStyle/GlobalStyle";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "./layout/Layout";
 import Login from "./pages/login/Login";
 import { isLogin } from "./helpers/isLogin";

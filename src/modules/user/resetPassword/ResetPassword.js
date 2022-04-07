@@ -14,7 +14,8 @@ function ResetPassword() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (user.password !== user.confirmPassword) {
+    console.log(user);
+    if (user.new_password !== user.confirmPassword) {
       return alert("Doesnt match");
     }
     axiosClient

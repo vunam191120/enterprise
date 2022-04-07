@@ -34,3 +34,7 @@
 .downloadBtn > .downloadIcon {
   margin-right: 4px;
 }
+
+.filter {
+  display: flex;
+}

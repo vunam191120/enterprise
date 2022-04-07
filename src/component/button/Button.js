@@ -41,6 +41,7 @@ export default function Button(props) {
         styles[props.buttonSize],
         props.className
       )}
+      disabled={props.disabled}
       type={props.type}
       onClick={props.onClick}
     >
