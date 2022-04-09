@@ -51,7 +51,7 @@ export default function Header() {
       <div className={styles.left}>
         <div className={clsx(styles.logo)}>
           <ImStack style={{ fontSize: "26px" }} />
-          <span className={clsx(styles.logoText)}>Purple</span>
+          <span className={clsx(styles.logoText)}>EWP</span>
         </div>
         <GoThreeBars className={styles.iconLeft} />
         <FiSearch className={styles.iconLeft} />

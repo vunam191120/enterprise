@@ -9,6 +9,7 @@ function Select({
   className,
   defaultValue,
   children,
+  required,
   disabled,
 }) {
   const handleOnChange = (event) => {
@@ -21,12 +22,16 @@ function Select({
       defaultValue={defaultValue !== "" ? defaultValue : ""}
       id={id}
       onChange={handleOnChange}
-      required
+      required={required}
       disabled={disabled}
     >
       {children}
     </select>
   );
 }
+
+Select.defaultProps = {
+  required: true,
+};
 
 export default Select;

@@ -11,7 +11,7 @@ import AggrementTableHead from "./table-head";
 import { ROLES } from "../../../constants";
 import Pagination from "../../../component/pagination/Pagination";
 
-function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
+function AggrementsList() {
   const [aggrementId, setCateID] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [aggrements, setAggrements] = useState([]);
@@ -22,6 +22,7 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
     limit: 10,
     totalRows: 1,
   });
+  const [seperatePage, setSeperatePage] = useState([]);
 
   const handlePageChange = (newPage) => {
     setPagination({ ...pagination, page: newPage });
@@ -32,8 +33,8 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
       "http://103.107.182.190/service1/aggrement"
     );
     setAggrements(res.data.data);
-    setPagination({ ...pagination, totalRows: res.data.data.length });
   }
+
   useEffect(() => {
     if (currentUser.role_id === ROLES.QA_COORDINATOR) {
       alert("You cannot access this page");
@@ -41,6 +42,24 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
     }
     getAggrements();
   }, []);
+
+  useEffect(() => {
+    setPagination((pagination) => ({
+      ...pagination,
+      totalRows: aggrements.length,
+    }));
+  }, [aggrements.length]);
+
+  useEffect(() => {
+    setSeperatePage(
+      aggrements.slice(
+        (pagination.page - 1) * pagination.limit,
+        pagination.page * pagination.limit > aggrements.length
+          ? undefined
+          : pagination.page * pagination.limit
+      )
+    );
+  }, [aggrements, pagination.limit, pagination.page]);
 
   const handleClickClose = () => setIsOpen(false);
 
@@ -103,12 +122,7 @@ function AggrementsList({ currentPage, onCurrentPage, onPageSize }) {
         head={<AggrementTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={aggrements.slice(
-          (pagination.page - 1) * pagination.limit,
-          pagination.page * pagination.limit > aggrements.length
-            ? undefined
-            : pagination.page * pagination.limit
-        )}
+        data={seperatePage}
         title={"Aggrement List"}
       />
       <Pagination pagination={pagination} onPageChage={handlePageChange} />

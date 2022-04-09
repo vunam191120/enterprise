@@ -5,6 +5,7 @@ import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { ImEye } from "react-icons/im";
 import { HiDownload } from "react-icons/hi";
+import queryString from "query-string";
 
 import styles from "./IdeasList.module.css";
 import Popup from "../../../component/popup/Popup";
@@ -25,11 +26,10 @@ function IdeasList() {
     totalRows: 1,
   });
   const [seperatePage, setSeperatePage] = useState([]);
-
-  const [filter, setFilter] = useState({
-    key: "",
-    value: "",
-  });
+  const [terms, setTerms] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [filters, setFilters] = useState({});
 
   const handlePageChange = (newPage) => {
     setPagination({ ...pagination, page: newPage });
@@ -41,6 +41,28 @@ function IdeasList() {
   }
 
   useEffect(() => {
+    async function getCategories() {
+      const res = await axiosClient.get(
+        "http://103.107.182.190/service1/category"
+      );
+      setCategories(res.data.data);
+    }
+
+    async function getDepartments() {
+      const res = await axiosClient.get(
+        "http://103.107.182.190/service1/department"
+      );
+      setDepartments(res.data.data);
+    }
+
+    async function getTerms() {
+      const res = await axiosClient.get("http://103.107.182.190/service1/term");
+      setTerms(res.data.data);
+    }
+
+    getCategories();
+    getDepartments();
+    getTerms();
     getIdeas();
   }, []);
 
@@ -125,25 +147,19 @@ function IdeasList() {
     </tr>
   );
 
-  const handleOnFilter = (target) => {
-    setFilter({ ...filter, value: target.value });
-  };
-
-  const handleOnSelectChange = (target) => {
-    setFilter({ ...filter, key: target.value });
+  const handleOnChange = (target) => {
+    setFilters({ ...filters, [target.name]: target.value });
   };
 
   const handleOnSubmitFilter = (e) => {
     e.preventDefault();
-    // axiosClient
-    //   .get(`http://103.107.182.190/service1/idea?${filter.key}=${filter.value}`)
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   })
-    //   .catch((err) => console.log(err));
-    console.log(
-      `http://103.107.182.190/service1/idea?${filter.key}=${filter.value}`
-    );
+    const paramString = queryString.stringify(filters);
+    axiosClient
+      .get(`http://103.107.182.190/service1/idea?${paramString}`)
+      .then((res) => {
+        setIdeas(res.data.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   if (ideas.length === 0) {
@@ -156,30 +172,116 @@ function IdeasList() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.filterContainer}>
+        <h2>Filter</h2>
+        <form onSubmit={handleOnSubmitFilter} className={styles.filterForm}>
+          <div className={styles.filterContent}>
+            <div className={styles.left}>
+              <Input
+                onChange={handleOnChange}
+                config={{
+                  name: "title",
+                  type: "text",
+                  placeholder: "Type your title",
+                  className: styles.filterInput,
+                }}
+              />
+              <Input
+                onChange={handleOnChange}
+                config={{
+                  name: "full_name",
+                  type: "text",
+                  placeholder: "Type Full Name",
+                  className: styles.filterInput,
+                }}
+              />
+            </div>
+            <div className={styles.right}>
+              <div className={styles.rightFirst}>
+                <Select
+                  name="category_id"
+                  defaultValue={""}
+                  onChange={handleOnChange}
+                  required={false}
+                >
+                  <option value="">Select category</option>
+                  {categories.map((item, index) => (
+                    <option
+                      value={item.category_id}
+                      key={`${item.name} ${index}`}
+                    >
+                      {item.category_name}
+                    </option>
+                  ))}
+                </Select>
+                <Select
+                  name="status"
+                  defaultValue={""}
+                  onChange={handleOnChange}
+                  required={false}
+                >
+                  <option value="">Select status</option>
+                  <option value="first_closure">First Closure</option>
+                  <option value="final_closure">Final Closure</option>
+                </Select>
+              </div>
+              <div className={styles.rightSecond}>
+                <Select
+                  name="department_id"
+                  defaultValue={""}
+                  required={false}
+                  onChange={handleOnChange}
+                >
+                  <option value="">Select department</option>
+                  {departments.map((item, index) => (
+                    <option
+                      value={item.department_id}
+                      key={`${item.department_name} ${index}`}
+                    >
+                      {item.department_name}
+                    </option>
+                  ))}
+                </Select>
+                <Select
+                  name="term_id"
+                  defaultValue={""}
+                  required={false}
+                  onChange={handleOnChange}
+                >
+                  <option value="">Select term</option>
+                  {terms.map((item, index) => (
+                    <option
+                      value={item.term_id}
+                      key={`${item.term_name} ${index}`}
+                    >
+                      {item.term_name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+          </div>
+          <Button
+            className={styles.filterBtn}
+            type={"submit"}
+            buttonSize={"btnMedium"}
+            buttonStyle={"btnPrimarySolid"}
+          >
+            Filter
+          </Button>
+          <Button
+            className={styles.resetBtn}
+            type={"submit"}
+            buttonSize={"btnMedium"}
+            buttonStyle={"btnPrimarySolid"}
+            onClick={() => getIdeas()}
+          >
+            Update Table
+          </Button>
+        </form>
+      </div>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <h2>Idea List</h2>
-        <form onSubmit={handleOnSubmitFilter} className={styles.filter}>
-          <Input
-            onChange={handleOnFilter}
-            config={{
-              name: "filter",
-              type: "number",
-              placeholder: "Select one filed and search",
-              className: styles.filterInput,
-            }}
-          />
-          <Select
-            name="field"
-            defaultValue={""}
-            onChange={handleOnSelectChange}
-          >
-            <option value="" disabled hidden>
-              Choose your filter...
-            </option>
-            <option value="department">Department ID</option>
-            <option value="category">Category ID</option>
-          </Select>
-        </form>
         <Button
           className={styles.downloadBtn}
           type={"button"}

@@ -9,6 +9,7 @@ import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import UserTableHead from "./table-head";
 import { ROLES } from "../../../constants";
+import Pagination from "../../../component/pagination/Pagination";
 
 function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   const [userId, setUserId] = useState("");
@@ -16,6 +17,12 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
   const [users, setUsers] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalRows: 1,
+  });
+  const [seperatePage, setSeperatePage] = useState([]);
 
   async function getUsers() {
     let res = await axiosClient.get("http://103.107.182.190/service1/user/");
@@ -29,6 +36,28 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
     }
     getUsers();
   }, []);
+
+  useEffect(() => {
+    setPagination((pagination) => ({
+      ...pagination,
+      totalRows: users.length,
+    }));
+  }, [users.length]);
+
+  useEffect(() => {
+    setSeperatePage(
+      users.slice(
+        (pagination.page - 1) * pagination.limit,
+        pagination.page * pagination.limit > users.length
+          ? undefined
+          : pagination.page * pagination.limit
+      )
+    );
+  }, [users, pagination.limit, pagination.page]);
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
+  };
 
   const handleClickClose = () => setIsOpen(false);
 
@@ -98,9 +127,10 @@ function UsersList({ currentPage, onCurrentPage, onPageSize }) {
           head={<UserTableHead />}
           renderRows={renderRows}
           onClickDeleteButton={onClickDelete}
-          data={users}
+          data={seperatePage}
           title="User List"
         />
+        <Pagination pagination={pagination} onPageChage={handlePageChange} />
 
         <Popup
           isOpen={isOpen}

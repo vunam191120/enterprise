@@ -9,6 +9,7 @@ import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import DepartmentTableHead from "./table-head";
 import { ROLES } from "../../../constants";
+import Pagination from "../../../component/pagination/Pagination";
 
 function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
   const [departmentId, setDepartmentId] = useState("");
@@ -16,6 +17,12 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
   const [departments, setDepartments] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalRows: 1,
+  });
+  const [seperatePage, setSeperatePage] = useState([]);
 
   async function getDepartments() {
     let res = await axiosClient.get(
@@ -31,6 +38,28 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
     }
     getDepartments();
   }, []);
+
+  useEffect(() => {
+    setPagination((pagination) => ({
+      ...pagination,
+      totalRows: departments.length,
+    }));
+  }, [departments.length]);
+
+  useEffect(() => {
+    setSeperatePage(
+      departments.slice(
+        (pagination.page - 1) * pagination.limit,
+        pagination.page * pagination.limit > departments.length
+          ? undefined
+          : pagination.page * pagination.limit
+      )
+    );
+  }, [departments, pagination.limit, pagination.page]);
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
+  };
 
   const handleClickClose = () => setIsOpen(false);
 
@@ -89,6 +118,7 @@ function DepartmentsList({ currentPage, onCurrentPage, onPageSize }) {
         data={departments}
         title={"Department List"}
       />
+      <Pagination pagination={pagination} onPageChage={handlePageChange} />
 
       <Popup
         isOpen={isOpen}

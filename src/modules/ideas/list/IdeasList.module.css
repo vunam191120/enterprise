@@ -35,6 +35,22 @@
   margin-right: 4px;
 }
 
-.filter {
+/* Filter */
+
+.filterForm {
+  margin: 20px 0 40px;
+}
+
+.filterContent {
   display: flex;
+  margin-bottom: 30px;
+}
+
+.right {
+  display: flex;
+}
+
+.filterBtn {
+  margin-right: 30px;
+  font-weight: 500;
 }

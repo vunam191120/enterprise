@@ -1,12 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
+import DashboardList from "../../modules/dashboard/DashboardList";
 
 function Dashboard() {
-  return (
-    <Link to="/dashboard/?name=vuhainam&age=21" replace>
-      Test Param
-    </Link>
-  );
+  return <DashboardList />;
 }
 
 export default Dashboard;

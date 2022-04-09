@@ -9,13 +9,20 @@ import Popup from "../../../component/popup/Popup";
 import Table from "../../../component/table/Table";
 import TermTableHead from "./table-head";
 import { ROLES } from "../../../constants";
+import Pagination from "../../../component/pagination/Pagination";
 
-function TermsList({ currentPage, onCurrentPage, onPageSize }) {
+function TermsList() {
   const [termId, setTermId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [terms, setTerms] = useState([]);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const navigate = useNavigate();
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    totalRows: 1,
+  });
+  const [seperatePage, setSeperatePage] = useState([]);
 
   async function getTerms() {
     let res = await axiosClient.get("http://103.107.182.190/service1/term");
@@ -29,6 +36,28 @@ function TermsList({ currentPage, onCurrentPage, onPageSize }) {
     }
     getTerms();
   }, []);
+
+  useEffect(() => {
+    setPagination((pagination) => ({
+      ...pagination,
+      totalRows: terms.length,
+    }));
+  }, [terms.length]);
+
+  useEffect(() => {
+    setSeperatePage(
+      terms.slice(
+        (pagination.page - 1) * pagination.limit,
+        pagination.page * pagination.limit > terms.length
+          ? undefined
+          : pagination.page * pagination.limit
+      )
+    );
+  }, [terms, pagination.limit, pagination.page]);
+
+  const handlePageChange = (newPage) => {
+    setPagination({ ...pagination, page: newPage });
+  };
 
   const handleClickClose = () => setIsOpen(false);
 
@@ -99,9 +128,10 @@ function TermsList({ currentPage, onCurrentPage, onPageSize }) {
         head={<TermTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={terms}
+        data={seperatePage}
         title={"Term List"}
       />
+      <Pagination pagination={pagination} onPageChage={handlePageChange} />
 
       <Popup
         isOpen={isOpen}

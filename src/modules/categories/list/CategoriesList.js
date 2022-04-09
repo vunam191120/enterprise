@@ -20,6 +20,7 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
     limit: 10,
     totalRows: 1,
   });
+  const [seperatePage, setSeperatePage] = useState([]);
 
   const handlePageChange = (newPage) => {
     setPagination({ ...pagination, page: newPage });
@@ -28,9 +29,26 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
   useEffect(() => {
     axiosClient.get("http://103.107.182.190/service1/category").then((res) => {
       setCategories(res.data.data);
-      setPagination({ ...pagination, totalRows: res.data.data.length });
     });
   }, []);
+
+  useEffect(() => {
+    setPagination((pagination) => ({
+      ...pagination,
+      totalRows: categories.length,
+    }));
+  }, [categories.length]);
+
+  useEffect(() => {
+    setSeperatePage(
+      categories.slice(
+        (pagination.page - 1) * pagination.limit,
+        pagination.page * pagination.limit > categories.length
+          ? undefined
+          : pagination.page * pagination.limit
+      )
+    );
+  }, [categories, pagination.limit, pagination.page]);
 
   const handleClickClose = () => setIsOpen(false);
 
@@ -88,12 +106,7 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
         head={<CategoryTableHead />}
         renderRows={renderRows}
         onClickDeleteButton={onClickDelete}
-        data={categories.slice(
-          (pagination.page - 1) * pagination.limit,
-          pagination.page * pagination.limit > categories.length
-            ? undefined
-            : pagination.page * pagination.limit
-        )}
+        data={seperatePage}
         title={"Category List"}
       />
       <Pagination pagination={pagination} onPageChage={handlePageChange} />
