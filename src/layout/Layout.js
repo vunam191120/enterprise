@@ -36,10 +36,10 @@ export default function Layout() {
   //   ));
   // };
 
-  const [sidebar, setSidebar] = useState(false);
+  const [expand, setExpand] = useState(true);
 
-  const showSidebar = () => {
-    setSidebar(!sidebar);
+  const handleClickExpand = () => {
+    setExpand(!expand);
   };
 
   const currentRole = checkRole(
@@ -48,9 +48,12 @@ export default function Layout() {
 
   return (
     <div className={styles.app}>
-      <Header onClick={showSidebar} />
-      <div className={styles.sidebar}>
-        <Sidebar type={currentRole} />
+      <Header onClickExpand={handleClickExpand} statusExpand={expand} />
+      <div
+        style={{ width: expand ? "260px" : "70px" }}
+        className={styles.sidebar}
+      >
+        <Sidebar statusExpand={expand} type={currentRole} />
       </div>
       <div className={styles.contentContainer}>
         <div className={styles.content}>

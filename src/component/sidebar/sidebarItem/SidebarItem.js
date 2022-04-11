@@ -7,7 +7,7 @@ import SidebarDetail from "../sidebarDetail/SidebarDetail";
 
 const styleLinks = {};
 
-export default function SidebarItem({ item }) {
+export default function SidebarItem({ item, sidebarStatusExpand }) {
   const [detail, setDetail] = useState(false);
   // const [isActive, setIsActive] = useState(false);
 
@@ -23,7 +23,12 @@ export default function SidebarItem({ item }) {
 
   if (!item.subNav) {
     return (
-      <div className={clsx(styles.sidebarItem)}>
+      <div
+        className={clsx(
+          styles.sidebarItem,
+          !sidebarStatusExpand ? styles.sidebarItemCollapse : ""
+        )}
+      >
         <NavLink
           to={item.path}
           style={styleLinks}

@@ -19,9 +19,9 @@ import clsx from "clsx";
 import styles from "./Header.module.css";
 import Search from "../search/Search";
 
-export default function Header() {
+export default function Header({ onClickExpand, statusExpand }) {
   const [search, setSearch] = useState("");
-  const [expand, setExpand] = useState(false);
+  const [expandUser, setExpandUser] = useState(false);
   const navigate = useNavigate();
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -40,6 +40,10 @@ export default function Header() {
     setSearch(newData);
   };
 
+  const handleClickExpand = () => {
+    onClickExpand();
+  };
+
   const logout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("currentUser");
@@ -49,35 +53,45 @@ export default function Header() {
   return (
     <div className={styles.header}>
       <div className={styles.left}>
-        <div className={clsx(styles.logo)}>
+        <Link
+          to="/dashboard"
+          replace
+          style={{ width: statusExpand ? "260px" : "70px" }}
+          className={clsx(styles.logo)}
+        >
           <ImStack style={{ fontSize: "26px" }} />
-          <span className={clsx(styles.logoText)}>EWP</span>
-        </div>
-        <GoThreeBars className={styles.iconLeft} />
-        <FiSearch className={styles.iconLeft} />
-        <Search
-          onChange={handleOnChange}
-          config={configInput(
-            "search",
-            `${styles.searchInput}`,
-            "search",
-            "search",
-            search,
-            "Search Idea"
-          )}
-        />
+          {statusExpand && <p className={clsx(styles.logoText)}>EWP</p>}
+        </Link>
       </div>
       <div className={styles.right}>
+        <div className={styles.flex}>
+          <GoThreeBars
+            onClick={handleClickExpand}
+            className={clsx(styles.iconLeft, styles.expandBtn)}
+          />
+          <FiSearch className={styles.iconLeft} />
+          <Search
+            onChange={handleOnChange}
+            config={configInput(
+              "search",
+              `${styles.searchInput}`,
+              "search",
+              "search",
+              search,
+              "Search Idea"
+            )}
+          />
+        </div>
         <div
-          onClick={() => setExpand(!expand)}
-          className={clsx(styles.user, expand ? styles.expand : "")}
+          onClick={() => setExpandUser(!expandUser)}
+          className={clsx(styles.user, expandUser ? styles.expandUser : "")}
         >
           <img
             src={`http://103.107.182.190/${currentUser.avatar}`}
             alt="Avatar user"
           />
           <p>{currentUser.full_name}</p>
-          {!expand ? (
+          {!expandUser ? (
             <MdKeyboardArrowDown className={styles.iconRight} />
           ) : (
             <MdKeyboardArrowUp className={styles.iconRight} />

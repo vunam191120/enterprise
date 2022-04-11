@@ -6,11 +6,13 @@
 
 .sidebar {
   display: block;
-  width: 260px;
+  transition: 0.4s ease;
   background-color: #fff;
+  position: relative;
 }
 
 .contentContainer {
+  transition: 0.4s ease;
   display: block;
   flex: 1;
 }

@@ -1,15 +1,16 @@
-import { MdSpaceDashboard, MdManageAccounts, MdPolicy } from "react-icons/md";
+import { MdManageAccounts, MdPolicy } from "react-icons/md";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { BiCategoryAlt } from "react-icons/bi";
 import { IoMedkit } from "react-icons/io5";
 import { FaRegLightbulb } from "react-icons/fa";
 import { BsCalendar2Date } from "react-icons/bs";
+import { AiFillHome } from "react-icons/ai";
 
 const SidebarAdmin = [
   {
     title: "Dashboard",
     path: "/dashboard",
-    icon: <MdSpaceDashboard />,
+    icon: <AiFillHome />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
   },
@@ -121,7 +122,7 @@ const SidebarQAM = [
   {
     title: "Dashboard",
     path: "/dashboard",
-    icon: <MdSpaceDashboard />,
+    icon: <AiFillHome />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
   },
@@ -183,7 +184,7 @@ const SidebarQAC = [
   {
     title: "Dashboard",
     path: "/dashboard",
-    icon: <MdSpaceDashboard />,
+    icon: <AiFillHome />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
   },
@@ -207,7 +208,7 @@ const SidebarStaff = [
   {
     title: "Dashboard",
     path: "/dashboard",
-    icon: <MdSpaceDashboard />,
+    icon: <AiFillHome />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
   },

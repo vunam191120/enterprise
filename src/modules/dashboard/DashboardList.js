@@ -7,8 +7,11 @@ import {
   AiOutlineHeart,
   AiFillHeart,
   AiOutlineRise,
+  AiOutlineUser,
   AiFillHome,
+  AiOutlineLineChart,
 } from "react-icons/ai";
+import { FaRegLightbulb } from "react-icons/fa";
 import { TiDeleteOutline } from "react-icons/ti";
 import {
   BarChart,
@@ -34,6 +37,7 @@ import PopularTableHead from "./table-head";
 import Table from "../../component/table/Table";
 import Input from "../../component/input/Input";
 import Button from "../../component/button/Button";
+import checkRole from "../../helpers/checkRole";
 
 const dataBar = [
   {
@@ -137,9 +141,13 @@ const renderActiveShape = (props) => {
 };
 
 function DashboardList() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const currentRole = checkRole(currentUser.role_id);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [dataDashboard, setDataDashboard] = useState([]);
   const [reaction, setReaction] = useState(false);
   const [ideas, setIdeas] = useState([]);
+
   const [todo, setTodo] = useState([
     {
       name: "Print Statements",
@@ -160,6 +168,20 @@ function DashboardList() {
 
     getPopularIdea();
   }, []);
+
+  useEffect(() => {
+    async function getDashboardCard(type) {
+      const res = await axiosClient.get(
+        `http://103.107.182.190/service1/${type}`
+      );
+      return setDataDashboard(res.data.data);
+    }
+    if (currentRole === "Admin" || currentRole === "QA Manager") {
+      getDashboardCard("dashboard-admin");
+    } else {
+      getDashboardCard("dashboard");
+    }
+  }, [currentRole]);
 
   const onPieEnter = useCallback(
     (_, index) => {
@@ -182,7 +204,9 @@ function DashboardList() {
   };
 
   const handleOnChangeCheck = (index) => {
-    //   setTodo([...todo, {}])
+    const newTodo = [...todo];
+    newTodo[index] = { ...newTodo[index], status: !newTodo[index].status };
+    setTodo(newTodo);
   };
 
   const handleDeleteTask = (indexDelete) => {
@@ -199,7 +223,6 @@ function DashboardList() {
     setTodo([...todo, { name: task, status: false }]);
   };
 
-  //   const onClickDeleteTodo = (target) => {};
   return (
     <section className={styles.container}>
       <div className={styles.pageHeader}>
@@ -214,29 +237,37 @@ function DashboardList() {
           <div className={clsx(styles.itemContainer, "col lg4")}>
             <div className={styles.dashboardItem}>
               <DashBoardCard
-                title="Weekly Sales"
-                data="$ 15,0000"
-                extraData={"Increased by 60%"}
-                icon={<AiOutlineRise />}
+                title={`Users`}
+                data={dataDashboard.user}
+                extraData={"Increased by 10%"}
+                icon={<AiOutlineUser />}
               />
             </div>
           </div>
           <div className={clsx(styles.itemContainer, "col lg4")}>
             <div className={styles.dashboardItem}>
               <DashBoardCard
-                title="Weekly Sales"
-                data="$ 15,0000"
-                extraData={"Increased by 60%"}
-                icon={<AiOutlineRise />}
+                title="Ideas"
+                data={dataDashboard.idea}
+                extraData={"Increased by 10%"}
+                icon={<FaRegLightbulb />}
               />
             </div>
           </div>
           <div className={clsx(styles.itemContainer, "col lg4")}>
             <div className={styles.dashboardItem}>
               <DashBoardCard
-                title="Weekly Sales"
-                data="$ 15,0000"
-                extraData={"Increased by 60%"}
+                title={
+                  currentRole === "Admin" || currentRole === "QA Manager"
+                    ? "Departments"
+                    : "Pending Requests"
+                }
+                data={
+                  currentRole === "Admin" || currentRole === "QA Manager"
+                    ? dataDashboard.department
+                    : "19"
+                }
+                extraData={"Increased by 10%"}
                 icon={<AiOutlineRise />}
               />
             </div>
