@@ -121,7 +121,7 @@ export default function LoginForm() {
           <div className={clsx(styles.left, "row")}>
             <div className={clsx("col lg9")}>
               <h3 className={clsx(styles.title)}>
-                Login to <strong>Purple</strong>
+                Login to <strong>EWP</strong>
               </h3>
               <p className={clsx(styles.text)}>
                 Lorem ipsum dolor sit amet elit. Sapiente sit aut eos
@@ -195,7 +195,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <div className={clsx(styles.content)}>
+        <div className={clsx(styles.content, styles.slider)}>
           {/* Slider */}
           <img
             src={slider}

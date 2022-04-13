@@ -18,7 +18,9 @@ export default function SidebarItem({ item, sidebarStatusExpand }) {
   // }, []);
 
   const toggleDetail = () => {
-    setDetail(!detail);
+    if (sidebarStatusExpand) {
+      setDetail(!detail);
+    }
   };
 
   if (!item.subNav) {
@@ -43,13 +45,27 @@ export default function SidebarItem({ item, sidebarStatusExpand }) {
     );
   } else {
     return (
-      <div className={clsx(styles.sidebarWithSubNav)}>
+      <div
+        className={clsx(
+          styles.sidebarWithSubNav,
+          sidebarStatusExpand ? "" : styles.sbSubNavCollapse
+        )}
+      >
         <div className={clsx(styles.sidebarItem)} onClick={toggleDetail}>
-          <p className={clsx(styles.sidebarLable)}>{item.title}</p>
+          <p className={clsx(styles.sidebarLable)}>
+            <span>{item.title}</span>
+            {!sidebarStatusExpand && (
+              <div className={styles.subNavContainerCollapse}>
+                <SidebarDetail subItem={item.subNav} />
+              </div>
+            )}
+          </p>
           <div className={clsx(styles.iconsContainer)}>
-            <span className={clsx(styles.sidebarIcon)}>
-              {!detail ? item.iconClosed : item.iconOpened}
-            </span>
+            {sidebarStatusExpand && (
+              <span className={clsx(styles.sidebarIcon)}>
+                {!detail ? item.iconClosed : item.iconOpened}
+              </span>
+            )}
             <span className={clsx(styles.sidebarIcon)}>{item.icon}</span>
           </div>
         </div>

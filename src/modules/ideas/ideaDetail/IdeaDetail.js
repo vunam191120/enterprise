@@ -19,6 +19,7 @@ import Comment from "../../../component/comment/Comment";
 import Others from "../../../component/others/Others";
 import Popup from "../../../component/popup/Popup";
 import Button from "../../../component/button/Button";
+import clsx from "clsx";
 // import { IMG_EXTENSIONS } from "../../../constants/";
 
 const navs = [
@@ -216,8 +217,21 @@ function IdeaDetail() {
           <p className={styles.description}>Description: {idea.description}</p>
           <div className={styles.flex}>
             <div className={styles.actionContainer}>
-              <div className={styles.actionItem}>
-                <div className={styles.actionBtn} onClick={handleClickLike}>
+              <div
+                className={clsx(
+                  styles.actionItem,
+                  idea.status && styles.active
+                )}
+              >
+                <div
+                  className={styles.actionBtn}
+                  onClick={(e) => {
+                    if (idea.status === "final_closure") {
+                      return e.preventDefault();
+                    }
+                    handleClickLike();
+                  }}
+                >
                   {onFocusLike ? (
                     <AiTwotoneLike className={styles.actionIcon} />
                   ) : (
@@ -227,8 +241,21 @@ function IdeaDetail() {
                 </div>
                 <span>{countLike}</span>
               </div>
-              <div className={styles.actionItem}>
-                <div className={styles.actionBtn} onClick={handleClickDisLike}>
+              <div
+                className={clsx(
+                  styles.actionItem,
+                  idea.status && styles.active
+                )}
+              >
+                <div
+                  className={styles.actionBtn}
+                  onClick={(e) => {
+                    if (idea.status === "final_closure") {
+                      return e.preventDefault();
+                    }
+                    handleClickDisLike();
+                  }}
+                >
                   {onFocusDisLike ? (
                     <AiTwotoneDislike className={styles.actionIcon} />
                   ) : (
@@ -254,6 +281,11 @@ function IdeaDetail() {
             {navs.map((nav, index) => (
               <NavLink
                 to={`${nav.name}`}
+                onClick={(e) => {
+                  if (index === 1 && idea.status === "final_closure") {
+                    e.preventDefault();
+                  }
+                }}
                 key={index}
                 className={({ isActive }) =>
                   isActive

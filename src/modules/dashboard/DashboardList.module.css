@@ -26,6 +26,10 @@
   position: relative;
 }
 
+.popular {
+  overflow-x: scroll;
+}
+
 .columnChart::before {
   content: "Department's idea posting rate";
   position: absolute;
@@ -278,4 +282,17 @@
 .taskRemoveBtn:hover {
   transform: none;
   color: #b66dff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+  .itemContainer,
+  .containerChart,
+  .todo {
+    margin-top: 20px;
+  }
+
+  .recentList {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

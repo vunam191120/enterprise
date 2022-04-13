@@ -37,6 +37,12 @@ export default function Layout() {
   // };
 
   const [expand, setExpand] = useState(true);
+  const [slideNav, setSlideNav] = useState(false);
+
+  const handleClickSlide = () => {
+    setExpand(true);
+    setSlideNav(!slideNav);
+  };
 
   const handleClickExpand = () => {
     setExpand(!expand);
@@ -48,9 +54,16 @@ export default function Layout() {
 
   return (
     <div className={styles.app}>
-      <Header onClickExpand={handleClickExpand} statusExpand={expand} />
+      <Header
+        onClickSlide={handleClickSlide}
+        onClickExpand={handleClickExpand}
+        statusExpand={expand}
+      />
       <div
-        style={{ width: expand ? "260px" : "70px" }}
+        style={{
+          width: expand ? "260px" : "70px",
+          transform: slideNav ? "translateX(100%)" : "none",
+        }}
         className={styles.sidebar}
       >
         <Sidebar statusExpand={expand} type={currentRole} />

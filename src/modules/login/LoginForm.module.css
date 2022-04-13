@@ -6,7 +6,7 @@
 
 .content {
   height: 100%;
-  width: 50%;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,4 +122,11 @@
   text-align-last: left;
   font-size: 1rem;
   width: 100%;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+  .slider {
+    display: none;
+  }
 }

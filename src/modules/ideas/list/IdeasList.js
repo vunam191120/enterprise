@@ -6,6 +6,7 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 import { ImEye } from "react-icons/im";
 import { HiDownload } from "react-icons/hi";
 import queryString from "query-string";
+import clsx from "clsx";
 
 import styles from "./IdeasList.module.css";
 import Popup from "../../../component/popup/Popup";
@@ -134,7 +135,12 @@ function IdeasList() {
           <ImEye />
         </Link>
         <Link
-          className={styles.iconAction}
+          onClick={(e) => {
+            if (idea.status === "final_closure") {
+              e.preventDefault();
+            }
+          }}
+          className={clsx(styles.iconAction, idea.status === "final_closure" && styles.active)}
           to={`/ideas/update/${idea.idea_id}`}
         >
           <BiEditAlt />

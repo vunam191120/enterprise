@@ -120,6 +120,19 @@
   padding: 4px 0 4px 10px;
 }
 
+.actionItem.active {
+  background-color: #dddddd;
+}
+
+.actionItem.active > .actionBtn {
+  cursor: default;
+}
+
+.actionItem.active > .actionBtn:hover .actionIcon,
+.actionItem.active > .actionBtn:hover .actionIcon + span {
+  color: #555;
+}
+
 .actionIcon {
   font-size: 1.25rem;
   margin-right: 4px;
@@ -222,4 +235,48 @@
 
 .downloadBtn > .downloadIcon {
   margin-right: 4px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+  .header .imgContainer {
+    align-items: flex-start;
+  }
+
+  .imgContainer > img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .heading h3 {
+    font-size: 1.5rem;
+  }
+
+  .heading h4 {
+    font-size: 1.25rem;
+  }
+
+  .heading p {
+    font-size: 1rem;
+  }
+
+  .description {
+    font-size: 0.875rem;
+  }
+
+  .flex {
+    padding: 0;
+    flex-direction: column;
+  }
+
+  .downloadBtn {
+    margin-top: 10px;
+  }
+  .navLink {
+    margin-right: 6px;
+  }
+
+  .navLink span {
+    font-size: 0.875rem;
+  }
 }

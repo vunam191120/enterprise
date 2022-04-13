@@ -65,3 +65,10 @@
   height: 0;
   visibility: hidden;
 }
+
+/* RESPONSIVE */
+@media (max-width: 991px) {
+  .content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

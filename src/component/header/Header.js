@@ -19,7 +19,7 @@ import clsx from "clsx";
 import styles from "./Header.module.css";
 import Search from "../search/Search";
 
-export default function Header({ onClickExpand, statusExpand }) {
+export default function Header({ onClickSlide, onClickExpand, statusExpand }) {
   const [search, setSearch] = useState("");
   const [expandUser, setExpandUser] = useState(false);
   const navigate = useNavigate();
@@ -42,6 +42,10 @@ export default function Header({ onClickExpand, statusExpand }) {
 
   const handleClickExpand = () => {
     onClickExpand();
+  };
+
+  const handleClickSlide = () => {
+    onClickSlide();
   };
 
   const logout = () => {
@@ -67,7 +71,7 @@ export default function Header({ onClickExpand, statusExpand }) {
         <div className={styles.flex}>
           <GoThreeBars
             onClick={handleClickExpand}
-            className={clsx(styles.iconLeft, styles.expandBtn)}
+            className={clsx(styles.iconLeft, styles.iconExpand)}
           />
           <FiSearch className={styles.iconLeft} />
           <Search
@@ -108,11 +112,14 @@ export default function Header({ onClickExpand, statusExpand }) {
           </div>
         </div>
         <IconContext.Provider value={{ className: styles.iconsAction }}>
-          <MdFullscreen />
-          <BiEnvelope />
-          <AiOutlineBell />
-          <BsPower onClick={logout} />
-          {/* <BsPower /> */}
+          <MdFullscreen className={styles.iconFull} />
+          <BiEnvelope className={styles.iconHeader} />
+          <AiOutlineBell className={styles.iconHeader} />
+          <BsPower className={styles.iconHeader} onClick={logout} />
+          <GoThreeBars
+            onClick={handleClickSlide}
+            className={clsx(styles.iconLeft, styles.iconSlide)}
+          />
         </IconContext.Provider>
       </div>
     </div>

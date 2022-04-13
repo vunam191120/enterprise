@@ -16,7 +16,7 @@ import Button from "../../../component/button/Button";
 import Spinner from "../../../component/spinner/Spinner";
 import Select from "../../../component/select/Select";
 import Preview from "../../../component/preview/Preview";
-import { ROLES } from "../../../constants";
+import checkRole from "../../../helpers/checkRole";
 import Popup from "../../../component/popup/Popup";
 
 function IdeaForm({ mode }) {
@@ -29,7 +29,6 @@ function IdeaForm({ mode }) {
   const [oldDocsLength, setOldDocsLength] = useState(0);
   const [agree, setAgree] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
   // Body for agreement popups
   let body;
@@ -41,14 +40,6 @@ function IdeaForm({ mode }) {
     setCategories(res.data.data);
   }
 
-  async function getOneIdea() {
-    const res = await axiosClient.get(
-      `http://103.107.182.190/service1/idea/${ideaId}`
-    );
-    setIdea(res.data.data);
-    setOldDocsLength(res.data.data.documents.length);
-  }
-
   async function getAggrements() {
     const res = await axiosClient.get(
       "http://103.107.182.190/service1/aggrement"
@@ -57,13 +48,22 @@ function IdeaForm({ mode }) {
   }
 
   useEffect(() => {
-    // Check role
-    // if (currentUser.role_id === ROLES.QA_COORDINATOR) {
-    //   alert("You can not access this page");
-    //   navigate("/dashboard", { replace: true });
-    // }
     getAggrements();
     getCategories();
+
+    async function getOneIdea() {
+      const res = await axiosClient.get(
+        `http://103.107.182.190/service1/idea/${ideaId}`
+      );
+      setIdea(res.data.data);
+      setOldDocsLength(res.data.data.documents.length);
+      if (res.data.data.status === "final_closure") {
+        alert(
+          "The status of idea is final closure, You can not update this idea"
+        );
+        navigate(-1);
+      }
+    }
 
     if (mode === "update") {
       getOneIdea();
@@ -77,6 +77,7 @@ function IdeaForm({ mode }) {
     }
   }, []);
 
+  // Get data of agreements to pass through popup
   if (agreements.length > 0) {
     body = (
       <div className={styles.agreeContainer}>

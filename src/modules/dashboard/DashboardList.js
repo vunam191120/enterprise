@@ -234,7 +234,7 @@ function DashboardList() {
       {/* Dashboard Card */}
       <div className={styles.header}>
         <div className="row">
-          <div className={clsx(styles.itemContainer, "col lg4")}>
+          <div className={clsx(styles.itemContainer, "col sm12 md4 lg4")}>
             <div className={styles.dashboardItem}>
               <DashBoardCard
                 title={`Users`}
@@ -244,7 +244,7 @@ function DashboardList() {
               />
             </div>
           </div>
-          <div className={clsx(styles.itemContainer, "col lg4")}>
+          <div className={clsx(styles.itemContainer, "col sm12 md4 lg4")}>
             <div className={styles.dashboardItem}>
               <DashBoardCard
                 title="Ideas"
@@ -254,7 +254,7 @@ function DashboardList() {
               />
             </div>
           </div>
-          <div className={clsx(styles.itemContainer, "col lg4")}>
+          <div className={clsx(styles.itemContainer, "col sm12 md4 lg4")}>
             <div className={styles.dashboardItem}>
               <DashBoardCard
                 title={
@@ -366,7 +366,7 @@ function DashboardList() {
                 by the readable content of a page when looking at its layout.{" "}
               </p>
             </div>
-            <div className={styles.reaction}>
+            <div className={clsx(styles.reaction)}>
               {reaction ? (
                 <AiFillHeart
                   className={clsx(styles.heartActive, styles.reactBtn)}
@@ -385,7 +385,7 @@ function DashboardList() {
       {/* Popular Idea */}
       <div className={styles.bodyCard}>
         <div className="row">
-          <div className={clsx("col lg6")}>
+          <div className={clsx("col sm12 md12 lg6")}>
             <div className={styles.popular}>
               <Table
                 loading={false}
@@ -395,7 +395,7 @@ function DashboardList() {
               />
             </div>
           </div>
-          <div className={clsx("col lg6")}>
+          <div className={clsx("col sm12 md12 lg6")}>
             {/* Todo List */}
             <div className={styles.todo}>
               <form className={styles.todoForm} onSubmit={handleSubmitTodo}>
@@ -418,7 +418,6 @@ function DashboardList() {
                   Add
                 </Button>
               </form>
-              <h2>Task: {task}</h2>
               {todo.map((item, index) => (
                 <div
                   key={`${item.name} - ${index}`}
