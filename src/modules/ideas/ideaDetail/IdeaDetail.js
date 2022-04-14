@@ -85,9 +85,10 @@ function IdeaDetail() {
   const handleClickClose = () => setIsOpen(false);
 
   const onClickDownload = (docId) => {
+    console.log(`http://103.107.182.190/service1/download/${docId}`);
     axiosClient
       .get(`http://103.107.182.190/service1/download/${docId}`)
-      .then((res) => console.log(res.data))
+      .then((res) => res)
       .catch((err) => console.log(err));
   };
 
