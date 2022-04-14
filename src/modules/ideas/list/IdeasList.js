@@ -100,11 +100,14 @@ function IdeasList() {
   };
 
   const handleClickDownloadAll = () => {
-    const filename = new Date() + "-idea.csv";
 
     axiosClient
       .get("http://103.107.182.190/service1/csv", { responseType: "blob" })
       .then((res) => {
+        // let headerLine = res.data.headers['content-disposition'];
+        const headerval = res.headers['content-disposition'];
+				const filename = headerval.split(';')[1].split('=')[1].replace('"', '').replace('"', '');
+
         const url = window.URL.createObjectURL(new Blob([res.data]));
         const link = document.createElement("a");
         link.href = url;
