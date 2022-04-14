@@ -87,8 +87,18 @@ function IdeaDetail() {
   const onClickDownload = (docId) => {
     console.log(`http://103.107.182.190/service1/download/${docId}`);
     axiosClient
-      .get(`http://103.107.182.190/service1/download/${docId}`)
-      .then((res) => res)
+      .get(`http://103.107.182.190/service1/download/${docId}`, { responseType: "blob"})
+      .then((res) => {
+        const headerval = res.headers['content-disposition'];
+				const filename = headerval.split(';')[1].split('=')[1].replace('"', '').replace('"', '');
+
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      })
       .catch((err) => console.log(err));
   };
 
@@ -187,8 +197,16 @@ function IdeaDetail() {
 
   const handleClickDownloadAll = () => {
     axiosClient
-      .get(`http://103.107.182.190/service1/download-all/${idea.idea_id}`)
-      .then((res) => console.log(res))
+      .get(`http://103.107.182.190/service1/download-all/${idea.idea_id}`, { responseType: "blob"})
+      .then((res) => {
+     
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "document.zip"); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+      })
       .catch((err) => console.log(err));
   };
 
