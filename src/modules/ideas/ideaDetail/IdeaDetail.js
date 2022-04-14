@@ -84,10 +84,11 @@ function IdeaDetail() {
 
   const handleClickClose = () => setIsOpen(false);
 
-  const onClickDownload = (fileType, fileName) => {
-    IMG_EXTENSIONS.includes(fileType)
-      ? console.log("Thats Image")
-      : console.log("Thats File");
+  const onClickDownload = (docId) => {
+    axiosClient
+      .get(`http://103.107.182.190/service1/download/${docId}`)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
 
   const onClickDelete = (deleteCommentId, deleteComentContent) => {
@@ -125,7 +126,7 @@ function IdeaDetail() {
     <div
       className={styles.item}
       key={index}
-      // onClick={() => onClickDownload(doc.file_type, doc.document)}
+      onClick={() => onClickDownload(doc.document_id)}
     >
       {IMG_EXTENSIONS.includes(doc.file_type) ? (
         <img

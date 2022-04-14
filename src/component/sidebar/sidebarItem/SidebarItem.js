@@ -52,14 +52,14 @@ export default function SidebarItem({ item, sidebarStatusExpand }) {
         )}
       >
         <div className={clsx(styles.sidebarItem)} onClick={toggleDetail}>
-          <p className={clsx(styles.sidebarLable)}>
+          <div className={clsx(styles.sidebarLable)}>
             <span>{item.title}</span>
             {!sidebarStatusExpand && (
               <div className={styles.subNavContainerCollapse}>
                 <SidebarDetail subItem={item.subNav} />
               </div>
             )}
-          </p>
+          </div>
           <div className={clsx(styles.iconsContainer)}>
             {sidebarStatusExpand && (
               <span className={clsx(styles.sidebarIcon)}>
