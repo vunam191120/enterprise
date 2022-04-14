@@ -184,7 +184,12 @@ function IdeaDetail() {
     }
   };
 
-  const handleClickDownloadAll = () => {};
+  const handleClickDownloadAll = () => {
+    axiosClient
+      .get(`http://103.107.182.190/service1/download-all/${idea.idea_id}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
 
   if (idea === null) {
     return (
@@ -275,7 +280,7 @@ function IdeaDetail() {
               onClick={handleClickDownloadAll}
             >
               <HiDownload className={styles.downloadIcon} />
-              Export All
+              Download All
             </Button>
           </div>
           <div className={styles.nav}>
