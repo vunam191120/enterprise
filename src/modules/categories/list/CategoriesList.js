@@ -62,7 +62,7 @@ function CategoriesList({ currentPage, onCurrentPage, onPageSize }) {
       .delete(`http://103.107.182.190/service1/category/${deleteCateId}`)
       .then((response) => {
         console.log(response.data);
-        navigate(-1);
+        navigate("/categories/view", { replace: true });
       })
       .catch((err) => console.log(err));
   };
