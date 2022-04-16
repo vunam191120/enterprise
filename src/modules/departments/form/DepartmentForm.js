@@ -167,7 +167,7 @@ function DepartmentForm({ mode }) {
             {managers.map((manager, index) => (
               <option
                 key={`${manager.username} ${index}`}
-                value={manager.role_id}
+                value={manager.user_id}
               >
                 {manager.full_name}
               </option>

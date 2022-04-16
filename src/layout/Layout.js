@@ -1,8 +1,6 @@
-// import { Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
 import styles from "./Layout.module.css";
-// import clsx from "clsx";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Header from "../component/header/Header";
 import Sidebar from "../component/sidebar/Sidebar";
@@ -116,7 +114,7 @@ export default function Layout() {
               <Route path="create" element={<CreateAggrement />} />
               <Route path="view" element={<Aggrement />} />
             </Route>
-            {/* <Route path="*" element={<Navigate to="/dashboard" replace />} /> */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           {/* <Outlet /> */}
         </div>
